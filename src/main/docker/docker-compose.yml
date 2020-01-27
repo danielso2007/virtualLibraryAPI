@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+
+  @docker.data.base.name@:
+    image: mongo
+    restart: always
+    container_name: @docker.data.base.name@
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: @mongodb.username@
+      MONGO_INITDB_ROOT_PASSWORD: @mongodb.password@
+    volumes:
+      - "/opt/mongo/data/db:/data/db"
+      - "/opt/mongo/data/configdb:/data/configdb"
+      - "/opt/mongo/data/dump:/home/dump"
+      - "/opt/mongo/data/import:/home/import"
+    ports:
+      - @mongodb.port@:@mongodb.port@
+    logging:
+      driver: json-file
+    networks:
+      - @docker.networks@
+
+  @project.artifactId@:
+    image: @project.artifactId@:@project.version@
+    restart: always
+    container_name: @project.artifactId@
+    ports:
+      - @port@:@port@
+    logging:
+      driver: json-file
+    depends_on:
+      - @docker.data.base.name@
+    networks:
+      - @docker.networks@
+
+volumes:
+  datadb:
+  configdb:
+
+networks:
+  @docker.networks@:
+    driver: bridge

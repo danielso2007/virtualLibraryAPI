@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo Iniciando API...
+nohup java -jar @project.build.finalName@.jar & tail -f nohup.out

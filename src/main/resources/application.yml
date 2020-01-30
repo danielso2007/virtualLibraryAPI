@@ -1,8 +1,17 @@
-debug: @debug.properties@
-trace: @trace.properties@
+debug: '@debug.properties@'
+server:
+    compression:
+        enabled: true
+        min-response-size: 1
+    port: ${SERVER_PORT:@port@}
+    undertow:
+        accesslog:
+            dir: logs
+            enabled: false
+            pattern: '%t %a "%r" %s (%D ms)'
 spring:
     application:
-        name: @projet.artifactId@
+        name: '@projet.artifactId@'
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
     data:
@@ -19,14 +28,5 @@ spring:
         locale: pt-BR
         time-zone: America/Sao_Paulo
     profiles:
-        active: @spring.profiles.active@
-server:
-    compression:
-        enabled: true
-        min-response-size: 1
-    port: ${SERVER_PORT:@port@}
-    undertow:
-        accesslog:
-            dir: logs
-            enabled: false
-            pattern: %t %a "%r" %s (%D ms)
+        active: '@spring.profiles.active@'
+trace: '@trace.properties@'

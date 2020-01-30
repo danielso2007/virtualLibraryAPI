@@ -3,6 +3,9 @@ package br.com.virtuallibrary.commons.controllers;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,32 +31,36 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 	}
 
 	@GetMapping("/{id}")
-	public E find(@PathVariable ID id) {
-		return service.findById(id);
+	public ResponseEntity<E> find(@PathVariable ID id) {
+		return service.findById(id).map(entity -> ResponseEntity.ok().body(entity))
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@PostMapping
-	public E createE(@RequestBody E object) {
-		return service.create(object);
-
+	public ResponseEntity<E> create(@RequestBody @Valid E object) {
+		return service.save(object).map(entity -> ResponseEntity.ok().body(entity))
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable ID id) {
-		service.delete(id);
-
+	public ResponseEntity<Object> delete(@PathVariable ID id) {
+		return service.findById(id).map(entity -> {
+			service.delete(id);
+			return ResponseEntity.ok().build();
+		}).orElse(ResponseEntity.notFound().build());
 	}
 
 	@PutMapping("/{id}")
-	public E update(@RequestBody E object, @PathVariable ID id) {
-		return service.update(object, id);
+	public ResponseEntity<E> update(@RequestBody @Valid E object, @PathVariable ID id) {
+		return service.update(object, id).map(entity -> ResponseEntity.ok().body(entity))
+				.orElse(ResponseEntity.notFound().build());
 
 	}
 
 	@PatchMapping("/{id}")
-	public E update(@RequestBody Map<String, String> updates, @PathVariable ID id) {
-		return service.update(updates, id);
-
+	public ResponseEntity<E> update(@RequestBody Map<String, String> updates, @PathVariable ID id) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		return service.update(updates, id).map(entity -> ResponseEntity.ok().body(entity))
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 }

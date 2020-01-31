@@ -1,9 +1,35 @@
 name: virtualLibraryAPI
 
-on: [push]
+env:
+  MAVEN_OPT: -q
+
+on:
+  # Acione o fluxo de trabalho na solicitação push ou pull,
+  # mas apenas para a ramificação principal.
+  push:
+    branches:
+    - master
+    - develop
+    - 'release/**'
+    tags:        
+    - v*
+    branches-ignore:
+    - 'release/**-alpha'
+    paths-ignore:
+    - '**.md'
+    - '**.sh'
+    - '**.json'
+    - '**.yml'
+  pull_request:
+    branches:
+    - master
+    - develop
+    - 'release/**'
+    tags:        
+    - v*
 
 jobs:
-  test:
+  Test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -12,5 +38,19 @@ jobs:
       with:
         java-version: 'openjdk11'
         architecture: 'x64'
-    - name: Build with Maven and test
-      run: mvn clean package test -P test
+    - name: Test with Maven
+      run: |
+        mvn ${MAVEN_OPT} test -P test
+  Build:
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Setup java
+      uses: joschi/setup-jdk@v1
+      with:
+        java-version: 'openjdk11'
+        architecture: 'x64'
+    - name: Build with Maven
+      run: |
+        mvn ${MAVEN_OPT} clean package install

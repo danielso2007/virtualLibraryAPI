@@ -13,8 +13,6 @@ on:
     - 'release/**'
     tags:        
     - v*
-    branches-ignore:
-    - 'release/**-alpha'
     paths-ignore:
     - '**.md'
     - '**.sh'

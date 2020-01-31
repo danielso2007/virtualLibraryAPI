@@ -1,3 +1,15 @@
+[![Actions Status](https://github.com/danielso2007/virtualLibraryAPI/workflows/virtualLibraryAPI/badge.svg)](https://github.com/danielso2007/virtualLibraryAPI/actions)
+![GitHub package version](https://img.shields.io/github/package-json/v/danielso2007/virtualLibraryAPI.svg)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/danielso2007/virtualLibraryAPI.svg)](https://github.com/danielso2007/virtualLibraryAPI/pulls)
+[![GitHub issues](https://img.shields.io/github/issues/danielso2007/virtualLibraryAPI.svg)](https://github.com/danielso2007/virtualLibraryAPI/issues?q=is%3Aopen+is%3Aissue)
+![GitHub last commit](https://img.shields.io/github/last-commit/danielso2007/virtualLibraryAPI.svg)
+[![GitHub issue/pull request author](https://img.shields.io/github/issues/detail/u/danielso2007/virtualLibraryAPI/1.svg)](https://github.com/danielso2007/virtualLibraryAPI/pulls)
+![GitHub contributors](https://img.shields.io/github/contributors/danielso2007/virtualLibraryAPI.svg)
+![GitHub top language](https://img.shields.io/github/languages/top/danielso2007/virtualLibraryAPI.svg)
+[![GitHub](https://img.shields.io/github/license/danielso2007/virtualLibraryAPI.svg)](https://github.com/danielso2007/virtualLibraryAPI)
+[![GitHub All Releases](https://img.shields.io/github/downloads/danielso2007/virtualLibraryAPI/total.svg)](https://github.com/danielso2007/virtualLibraryAPI/archive/master.zip)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
 # Virtual Library API
 
 Virtual library API. This project is used to study REST Spring Boot projects.

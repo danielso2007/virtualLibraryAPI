@@ -12,6 +12,7 @@ logs/**
 .settings
 .springBeans
 .sts4-cache
+/node_module
 
 ### IntelliJ IDEA ###
 .idea

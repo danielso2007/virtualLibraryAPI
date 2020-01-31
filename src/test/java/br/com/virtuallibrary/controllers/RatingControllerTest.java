@@ -1,6 +1,5 @@
 package br.com.virtuallibrary.controllers;
 
-import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -10,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import java.util.Objects;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -46,13 +44,6 @@ public class RatingControllerTest {
 	@Before
 	public void setup() {
 		JacksonTester.initFields(this, new ObjectMapper());
-	}
-
-	@Test
-	public void contexLoads() {
-		assertNotNull(resource);
-		assertNotNull(service);
-		assertNotNull(mockMvc);
 	}
 
 	private MockHttpServletResponse getHttpServletResponse(String url, ResultMatcher status) throws Exception {

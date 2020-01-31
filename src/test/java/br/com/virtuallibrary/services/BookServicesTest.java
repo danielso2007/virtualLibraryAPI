@@ -8,7 +8,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import javax.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,12 +34,14 @@ import br.com.virtuallibrary.repositories.BookRepository;
 @RunWith(SpringRunner.class)
 public class BookServicesTest {
 
-	private static final String USER = "test";
+	private static final String LETTING_GO = "Letting Go";
+	private static final String PHILIP_ROTH = "Philip Roth";
 	private static final String TITLE = "O Símbolo Perdido de Dan Brown";
 	private static final String AUTHOR = "Dan Brown";
 	private static final String ID = "5dc4c9734e9b1214ed7a9e8a";
 
 	private Book ENTITY;
+	private Book ENTITY_ID;
 
 	@MockBean
 	private BookRepository repository;
@@ -49,16 +51,14 @@ public class BookServicesTest {
 
 	@Before
 	public void setUp() {
-		ENTITY = Book.builder().id(ID).author(AUTHOR).title(TITLE).creator(USER).createdAt(new Date()).updater(USER)
-				.updatedAt(new Date()).build();
-
-		Optional<Book> optional = Optional.of(ENTITY);
+		ENTITY = Book.builder().author(AUTHOR).title(TITLE).build();
+		ENTITY_ID = Book.builder().id(ID).author(AUTHOR).title(TITLE).build();
 
 		List<Book> list = new ArrayList<>();
-		list.add(ENTITY);
+		list.add(ENTITY_ID);
 
-		when(repository.findById(ID)).thenReturn(optional);
-		when(repository.save(ENTITY)).thenReturn(ENTITY);
+		when(repository.save(ArgumentMatchers.any())).thenReturn(ENTITY_ID);
+		when(repository.findById(ID)).thenReturn(Optional.of(ENTITY_ID));
 		when(repository.findAll()).thenReturn(list);
 	}
 
@@ -91,17 +91,31 @@ public class BookServicesTest {
 
 	@Test
 	public void testSaveEntityNull() {
+		when(repository.save(ArgumentMatchers.any())).thenReturn(null);
 		assertTrue(service.save(null).isEmpty());
 	}
 
 	@Test
 	public void testSaveEntityEmpty() {
+		when(repository.save(ArgumentMatchers.any())).thenReturn(null);
 		assertTrue(service.save(new Book()).isEmpty());
 	}
 
 	@Test
 	public void testSaveEntity() {
 		assertTrue(service.save(ENTITY).isPresent());
+	}
+	
+	@Test
+	public void testSaveEntityAuditCreatedAt() {
+		service.save(ENTITY);
+		assertNotNull(ENTITY.getCreatedAt());
+	}
+	
+	@Test
+	public void testSaveEntityAuditCreator() {
+		service.save(ENTITY);
+		assertNotNull(ENTITY.getCreator());
 	}
 
 	@Test
@@ -124,8 +138,22 @@ public class BookServicesTest {
 	@Test
 	public void testUpdateEntity() {
 		BookBuilder<?,?> entity = Book.builder();
-		entity.author("XPTO");
-		assertTrue(service.update(entity.build(), ID).isPresent());
+		entity.author(PHILIP_ROTH);
+		entity.title(LETTING_GO);
+		Book book = entity.build();
+		assertTrue(service.update(book, ID).isPresent());
+	}
+	
+	@Test
+	public void testUpdateEntityUpdatedAt() {
+		service.update(ENTITY_ID, ID);
+		assertNotNull(ENTITY_ID.getUpdatedAt());
+	}
+	
+	@Test
+	public void testUpdateEntityUpdater() {
+		service.update(ENTITY_ID, ID);
+		assertNotNull(ENTITY_ID.getUpdater());
 	}
 
 	@Test
@@ -146,7 +174,8 @@ public class BookServicesTest {
 	@Test
 	public void testUpdateEntityMapValues() throws SecurityException, IllegalArgumentException, IllegalAccessException {
 		Map<String, String> updates = new HashMap<String, String>();
-		updates.put("author", "Daniel");
+		updates.put("author", PHILIP_ROTH);
+		System.out.println(ENTITY_ID);
 		assertTrue(service.update(updates, ID).isPresent());
 	}
 

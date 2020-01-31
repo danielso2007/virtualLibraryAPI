@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.validation.ValidationException;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.BaseRepository;
 
@@ -23,5 +25,9 @@ public interface BaseService<E extends BaseEntity, ID extends Serializable, R ex
 	Optional<E> update(Map<String, String> updates, ID id) throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException;
 
 	Optional<E> update(E object, ID id);
+
+	UserDetails getUser();
+
+	Optional<UserDetails> getPessoaLogada();
 
 }

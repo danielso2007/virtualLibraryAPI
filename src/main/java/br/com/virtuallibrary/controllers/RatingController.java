@@ -3,9 +3,12 @@ package br.com.virtuallibrary.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.virtuallibrary.commons.Constants;
@@ -15,6 +18,7 @@ import br.com.virtuallibrary.repositories.RatingRepository;
 import br.com.virtuallibrary.services.RatingService;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(Constants.ROOT_URL + Constants.V1 + "/ratings")
 public class RatingController extends BaseController<Rating, String, RatingRepository, RatingService> {
 
@@ -23,7 +27,8 @@ public class RatingController extends BaseController<Rating, String, RatingRepos
 		super(service);
 	}
 
-	@GetMapping
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping(produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
 	public List<Rating> findAll(@RequestParam(required = false, defaultValue = "") String bookId) {
 		if (bookId.isBlank()) {
 			return getService().findAll();

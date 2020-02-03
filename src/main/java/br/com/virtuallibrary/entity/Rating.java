@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import br.com.virtuallibrary.commons.entities.BaseAudit;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,6 +22,7 @@ import lombok.experimental.SuperBuilder;
 
 @Document
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(value = Include.NON_NULL)
 @Validated
 @NoArgsConstructor
 @AllArgsConstructor

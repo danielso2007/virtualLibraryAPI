@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+import br.com.virtuallibrary.commons.Constants;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.BaseRepository;
 import br.com.virtuallibrary.commons.services.BaseService;
@@ -30,19 +33,22 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 		return service;
 	}
 
-	@GetMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
 	public ResponseEntity<E> find(@PathVariable ID id) {
 		return service.findById(id).map(entity -> ResponseEntity.ok().body(entity))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
-	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping(produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
 	public ResponseEntity<E> create(@RequestBody @Valid E object) {
-		return service.save(object).map(entity -> ResponseEntity.ok().body(entity))
+		return service.save(object).map(entity -> ResponseEntity.status(HttpStatus.CREATED).body(entity))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
-	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@DeleteMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
 	public ResponseEntity<Object> delete(@PathVariable ID id) {
 		return service.findById(id).map(entity -> {
 			service.delete(id);
@@ -50,14 +56,16 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
-	@PutMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
 	public ResponseEntity<E> update(@RequestBody @Valid E object, @PathVariable ID id) {
 		return service.update(object, id).map(entity -> ResponseEntity.ok().body(entity))
 				.orElse(ResponseEntity.notFound().build());
 
 	}
 
-	@PatchMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@PatchMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
 	public ResponseEntity<E> update(@RequestBody Map<String, String> updates, @PathVariable ID id) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		return service.update(updates, id).map(entity -> ResponseEntity.ok().body(entity))
 				.orElse(ResponseEntity.notFound().build());

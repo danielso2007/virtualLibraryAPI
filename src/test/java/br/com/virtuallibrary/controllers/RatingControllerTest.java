@@ -1,22 +1,28 @@
 package br.com.virtuallibrary.controllers;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 
 import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpMethod;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,65 +31,150 @@ import br.com.virtuallibrary.entity.Rating;
 import br.com.virtuallibrary.repositories.RatingRepository;
 import br.com.virtuallibrary.services.RatingService;
 
-public class RatingControllerTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+@RunWith(SpringRunner.class)
+public class RatingControllerTest extends TestBaseController {
 
-	public static final String API_BOOKS = "/api/v1/ratings";
+	public static final String API = "/api/v1/ratings";
 	private final String ID = "5dc4c9734e9b1214ed7a9e8a";
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	@Autowired
-	private RatingRepository resource;
-
+	private Rating ENTITY_01;
+	private Rating ENTITY_02;
+	
 	@MockBean
+	private RatingRepository repository;
+
+	@Autowired
 	private RatingService service;
 
-	private JacksonTester<Rating> json;
+	private JacksonTester<List<Rating>> jsonList;
+	private JacksonTester<Rating> jsonEntity;
 
 	@Before
 	public void setup() {
 		JacksonTester.initFields(this, new ObjectMapper());
 	}
 
-	private MockHttpServletResponse getHttpServletResponse(String url, ResultMatcher status) throws Exception {
-		return httpServletResponse(HttpMethod.GET, url, null, status);
+	@Before
+	public void setUp() {
+		ENTITY_01 = Rating.builder().bookId("kjasdh6753hsf27634").stars(3).build();
+		ENTITY_02 = Rating.builder().bookId("asgd5555423gsdjhkk").stars(4).build();
+
+		List<Rating> list = new ArrayList<>();
+		list.add(ENTITY_01);
+		list.add(ENTITY_02);
+
+		when(repository.save(ArgumentMatchers.any())).thenReturn(ENTITY_01);
+		when(repository.findById(anyString())).thenReturn(Optional.of(ENTITY_01));
+		when(repository.findAll()).thenReturn(list);
 	}
-
-	private MockHttpServletResponse putHttpServletResponse(String url, String json, ResultMatcher status)
-			throws Exception {
-		return httpServletResponse(HttpMethod.PUT, url, json, status);
+	
+	@Test
+	public void testContexLoads() {
+		assertNotNull(service);
+		assertNotNull(repository);
 	}
-
-	private MockHttpServletResponse deleteHttpServletResponse(String url, ResultMatcher status) throws Exception {
-		return httpServletResponse(HttpMethod.DELETE, url, null, status);
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testGetAll() throws Exception {
+		List<Rating> list = new ArrayList<>();
+		list.add(ENTITY_01);
+		list.add(ENTITY_02);
+		assertEquals(getHttpServletResponse(API, status().isOk()).getContentAsString(), jsonList.write(list).getJson());
 	}
-
-	private MockHttpServletResponse postHttpServletResponse(String url, String json, ResultMatcher status)
-			throws Exception {
-		return httpServletResponse(HttpMethod.POST, url, json, status);
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbyId() throws Exception {
+		Optional<Rating> opt = Optional.of(ENTITY_01);
+		String json = getHttpServletResponse(String.format("%s/%s", API, ID), status().isOk()).getContentAsString();
+		assertEquals(json, jsonEntity.write(opt.get()).getJson());
 	}
-
-	private MockHttpServletResponse httpServletResponse(HttpMethod httpMethod, String url, String json,
-			ResultMatcher status) throws Exception {
-		MockHttpServletRequestBuilder requestBuilder = null;
-
-		if (HttpMethod.POST.equals(httpMethod)) {
-			requestBuilder = post(url).contentType(Constants.APPLICATION_JSON_UTF_8);
-		} else if (HttpMethod.GET.equals(httpMethod)) {
-			requestBuilder = get(url).contentType(Constants.APPLICATION_JSON_UTF_8);
-		} else if (HttpMethod.PUT.equals(httpMethod)) {
-			requestBuilder = put(url).contentType(Constants.APPLICATION_JSON_UTF_8);
-		} else if (HttpMethod.DELETE.equals(httpMethod)) {
-			requestBuilder = delete(url).contentType(Constants.APPLICATION_JSON_UTF_8);
-		}
-
-		if (json != null) {
-			Objects.requireNonNull(requestBuilder).content(json);
-		}
-
-		return mockMvc.perform(Objects.requireNonNull(requestBuilder)).andDo(print()).andExpect(status).andReturn()
-				.getResponse();
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbySave() throws Exception {
+		Optional<Rating> opt = Optional.of(ENTITY_01);
+		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isCreated()).getContentAsString();
+		assertEquals(json, jsonEntity.write(opt.get()).getJson());
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbySaveStars() throws Exception {
+		Optional<Rating> opt = Optional.of(ENTITY_01);
+		ENTITY_01.setStars(-1);
+		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
+		assertEquals(Constants.BLANK, json);
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbySaveBookIdNull() throws Exception {
+		Optional<Rating> opt = Optional.of(ENTITY_01);
+		ENTITY_01.setBookId(null);
+		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
+		assertEquals(Constants.BLANK, json);
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testDeleteById() throws Exception {
+		deleteHttpServletResponse(String.format("%s/%s", API, ID), status().isOk());
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbyUpdate() throws Exception {
+		ENTITY_01.setId(ID);
+		Optional<Rating> opt = Optional.of(ENTITY_01);
+		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isOk()).getContentAsString();
+		ObjectMapper mapper = new ObjectMapper();
+		Rating obj = mapper.readValue(json, Rating.class);
+		assertEquals(obj, opt.get());
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbyUpdateBookIdNull() throws Exception {
+		ENTITY_01.setId(ID);
+		ENTITY_01.setBookId(null);
+		Optional<Rating> opt = Optional.of(ENTITY_01);
+		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
+		assertEquals(Constants.BLANK, json);
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbyUpdateStarsNull() throws Exception {
+		ENTITY_01.setId(ID);
+		ENTITY_01.setStars(-1);
+		Optional<Rating> opt = Optional.of(ENTITY_01);
+		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
+		assertEquals(Constants.BLANK, json);
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbyUpdateFields() throws Exception {
+		Map<String, String> fields = new TreeMap<String, String>();
+		fields.put("bookId", "kasdlkas63573sjd");
+		fields.put("stars", "3");
+		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isOk()).getContentAsString();
+		ObjectMapper mapper = new ObjectMapper();
+		Rating obj = mapper.readValue(json, Rating.class);
+		assertEquals(obj, ENTITY_01);
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testbyUpdateFieldNotFound() throws Exception {
+		Map<String, String> fields = new TreeMap<String, String>();
+		fields.put("asdas", "newEqwe");
+		fields.put("asdasd", "newTWER");
+		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isBadRequest()).getContentAsString();
+		assertEquals(Constants.BLANK, json);
 	}
 	
 }

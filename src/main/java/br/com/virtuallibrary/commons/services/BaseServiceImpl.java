@@ -77,6 +77,9 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 
 	@Override
 	public Optional<E> findById(ID id) {
+		if (id == null) {
+			return Optional.empty();
+		}
 		return repository.findById(id);
 	}
 

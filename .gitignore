@@ -13,6 +13,8 @@ logs/**
 .springBeans
 .sts4-cache
 /node_module
+/node_modules/**
+/node_modules/.bin/**
 
 ### IntelliJ IDEA ###
 .idea

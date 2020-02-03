@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/danielso2007/virtualLibraryAPI/issues"
   },
-  "homepage": "https://github.com/danielso2007/virtualLibraryAPI#readme"
+  "homepage": "https://github.com/danielso2007/virtualLibraryAPI#readme",
+  "devDependencies": {
+    "standard-version": "^7.1.0"
+  }
 }

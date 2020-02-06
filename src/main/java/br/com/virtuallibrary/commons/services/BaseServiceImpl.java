@@ -26,7 +26,9 @@ import br.com.virtuallibrary.commons.entities.BaseAudit;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.BaseRepository;
 import br.com.virtuallibrary.commons.utils.GenericsUtils;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R extends BaseRepository<E, ID>>
 		implements BaseService<E, ID, R> {
 
@@ -80,18 +82,21 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (id == null) {
 			return Optional.empty();
 		}
+		log.debug(String.format("Obtendo registro (%s): %s", entityClass.toString(), id));
 		return repository.findById(id);
 	}
 
 	@Override
 	public Optional<E> save(E entity) {
 		checkAuditedEntity(entity);
+		log.debug(String.format("Salvando registro %s.", entityClass.toString()));
 		Optional<E> opt = Optional.ofNullable(repository.save(entity));
 		return opt;
 	}
 
 	@Override
 	public void delete(ID id) {
+		log.debug(String.format("Deletando registro (%s): %s", entityClass.toString(), id));
 		repository.deleteById(id);
 	}
 
@@ -102,6 +107,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (opt.isEmpty()) {
 			return Optional.empty();
 		}
+		log.debug(String.format("Atualizando campos do registro (%s): %s", entityClass.toString(), id));
 		E entity = opt.get();
 		for (String fieldUpdate : updates.keySet()) {
 			Field declaredField;
@@ -124,6 +130,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (entity == null) {
 			throw new IllegalArgumentException(A_ENTIDADE_NAO_PODE_SER_NULA);
 		}
+		log.debug(String.format("Atualizando registro (%s): %s", entityClass.toString(), id));
 		Optional<E> opt = repository.findById(id);
 		if (opt.isEmpty()) {
 			return Optional.empty();

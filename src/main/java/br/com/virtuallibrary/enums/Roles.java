@@ -2,7 +2,8 @@ package br.com.virtuallibrary.enums;
 
 public enum Roles {
 
-	ADMIN("Administrador");
+	ADMIN("Administrador"),
+	USER("Usuário");
 
 	private String description;
 

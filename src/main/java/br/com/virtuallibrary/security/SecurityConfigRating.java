@@ -8,13 +8,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import br.com.virtuallibrary.commons.Constants;
 import br.com.virtuallibrary.enums.Roles;
 
 /**
- * Rating security.
- * Anyone can read resources.
- * Only admins can modify resources.
+ * Rating security. Anyone can read resources. Only admins can modify resources.
+ * 
  * @author daniel
  */
 @EnableWebSecurity
@@ -22,28 +24,36 @@ import br.com.virtuallibrary.enums.Roles;
 @Order(value = 1)
 public class SecurityConfigRating extends WebSecurityConfigurerAdapter {
 
-	private static final String PATH = "/ratings";
+	private static final String PATH = Constants.ROOT_URL + Constants.V1 + "ratings";
 
 	@Autowired
 	public void configureGlobal1(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication();
+		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		auth
+        .inMemoryAuthentication()
+        .withUser("user")
+        .password(encoder.encode("password"))
+        .roles(Roles.USER.toString())
+        .and()
+        .withUser("admin")
+        .password(encoder.encode("admin"))
+        .roles(Roles.USER.toString(), Roles.ADMIN.toString());
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic()
-				.disable()
-				.authorizeRequests()
-				.regexMatchers("^/ratings\\?bookId.*$")
-				.authenticated().antMatchers(HttpMethod.POST, PATH)
-				.authenticated().antMatchers(HttpMethod.PATCH, PATH + "/*").hasRole(Roles.ADMIN.toString())
-				.antMatchers(HttpMethod.DELETE, PATH + "/*").hasRole(Roles.ADMIN.toString())
-				.antMatchers(HttpMethod.GET, PATH).hasRole(Roles.ADMIN.toString())
-				.anyRequest()
-				.authenticated()
-				.and()
-				.csrf()
-				.disable();
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity.httpBasic().and()
+		        .authorizeRequests()
+				.regexMatchers("^/ratings\\?bookId.*$").permitAll()
+				.antMatchers(HttpMethod.GET, PATH + "/**").hasAnyRole(Roles.USER.toString(), Roles.ADMIN.toString())
+				.antMatchers(HttpMethod.POST, PATH).hasRole(Roles.ADMIN.toString())
+				.antMatchers(HttpMethod.PUT, PATH + "/**").hasRole(Roles.ADMIN.toString())
+				.antMatchers(HttpMethod.PATCH, PATH + "/**").hasRole(Roles.ADMIN.toString())
+				.antMatchers(HttpMethod.DELETE, PATH + "/**").hasRole(Roles.ADMIN.toString())
+				.anyRequest().authenticated();
+		httpSecurity.csrf().disable();
+		httpSecurity.formLogin().disable();
+		httpSecurity.headers().frameOptions().disable();
 	}
 
 }

@@ -68,7 +68,7 @@ public class SwaggerConfig {
         return new ApiInfo(
                 "Virtual Library REST API",
                 "API para cadastro e consulta de livros.",
-                "0.1.0",
+                "0.2.0",
                 "https://smartbear.com/terms-of-use/",
                 new Contact("Daniel Oliveira", "", "danielso2007@gmail.com"),
                 "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0.html", Collections.emptyList());

@@ -20,8 +20,7 @@ public class RatingServiceImpl extends BaseServiceImpl<Rating, String, RatingRep
 
 	@Override
 	public List<Rating> findByBookId(String bookId) {
-		// TODO Auto-generated method stub
-		return null;
+		return getRepository().findByBookId(bookId);
 	}
 
 }

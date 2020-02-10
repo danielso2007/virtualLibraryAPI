@@ -58,6 +58,7 @@ public class RatingServiceTest {
 		when(repository.save(ArgumentMatchers.any())).thenReturn(ENTITY_ID);
 		when(repository.findById(ID)).thenReturn(Optional.of(ENTITY_ID));
 		when(repository.findAll()).thenReturn(list);
+		when(repository.findByBookId(ID)).thenReturn(list);
 	}
 
 	@Test
@@ -175,6 +176,21 @@ public class RatingServiceTest {
 		updates.put("bookId", "lkkk866yytuwetu635");
 		System.out.println(ENTITY_ID);
 		assertTrue(service.update(updates, ID).isPresent());
+	}
+	
+	@Test
+	public void findByBookIdTestBookIdNull() {
+		assertTrue(service.findByBookId(null).isEmpty());
+	}
+	
+	@Test
+	public void findByBookIdTestBookId() {
+		assertTrue("A lista de rating não deve ser vazia", !service.findByBookId(ID).isEmpty());
+	}
+	
+	@Test
+	public void findByBookIdTestBookIdAnything() {
+		assertTrue("A lista de rating deve ser vazia quando ID inválido.", service.findByBookId("jkashd87612837jkashdksadh").isEmpty());
 	}
 	
 }

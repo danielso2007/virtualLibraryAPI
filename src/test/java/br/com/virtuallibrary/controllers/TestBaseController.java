@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.Map;
@@ -20,16 +21,16 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import br.com.virtuallibrary.commons.Constants;
 
 public abstract class TestBaseController {
-	
+
 	protected static final String ADMIN_ROLE = "ADMIN";
 	protected static final String USER_ROLE = "USER";
 	protected static final String ADMIN = "admin";
-	
+
 	protected JacksonTester<Map<String, String>> jsonEntityFields;
-	
+
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	protected MockHttpServletResponse getHttpServletResponse(String url, ResultMatcher status) throws Exception {
 		return httpServletResponse(HttpMethod.GET, url, null, status);
 	}
@@ -48,7 +49,13 @@ public abstract class TestBaseController {
 		return httpServletResponse(HttpMethod.POST, url, json, status);
 	}
 
-	protected MockHttpServletResponse httpServletResponse(HttpMethod httpMethod, String url, String json, ResultMatcher status) throws Exception {
+	protected MockHttpServletResponse patchHttpServletResponse(String url, String json, ResultMatcher status)
+			throws Exception {
+		return httpServletResponse(HttpMethod.PATCH, url, json, status);
+	}
+
+	protected MockHttpServletResponse httpServletResponse(HttpMethod httpMethod, String url, String json,
+			ResultMatcher status) throws Exception {
 		MockHttpServletRequestBuilder requestBuilder = null;
 
 		if (HttpMethod.POST.equals(httpMethod)) {
@@ -59,6 +66,8 @@ public abstract class TestBaseController {
 			requestBuilder = put(url).contentType(Constants.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.DELETE.equals(httpMethod)) {
 			requestBuilder = delete(url).contentType(Constants.APPLICATION_JSON_UTF_8);
+		} else if (HttpMethod.PATCH.equals(httpMethod)) {
+			requestBuilder = patch(url).contentType(Constants.APPLICATION_JSON_UTF_8);
 		}
 
 		if (json != null) {

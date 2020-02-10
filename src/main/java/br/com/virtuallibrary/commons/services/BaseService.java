@@ -28,6 +28,4 @@ public interface BaseService<E extends BaseEntity, ID extends Serializable, R ex
 
 	UserDetails getUser();
 
-	Optional<UserDetails> getPessoaLogada();
-
 }

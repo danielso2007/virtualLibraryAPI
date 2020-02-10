@@ -57,6 +57,7 @@ public class RatingServiceTest {
 
 		when(repository.save(ArgumentMatchers.any())).thenReturn(ENTITY_ID);
 		when(repository.findById(ID)).thenReturn(Optional.of(ENTITY_ID));
+		when(repository.findById(null)).thenReturn(Optional.empty());
 		when(repository.findAll()).thenReturn(list);
 		when(repository.findByBookId(ID)).thenReturn(list);
 	}
@@ -160,6 +161,11 @@ public class RatingServiceTest {
 		Rating entity = null;
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> service.update(entity, ID));
 		assertTrue(exception.getMessage().equals(BaseServiceImpl.A_ENTIDADE_NAO_PODE_SER_NULA));
+	}
+	
+	@Test
+	public void testUpdateIdNull() {
+		assertTrue(service.update(new Rating(), null).isEmpty());
 	}
 	
 	@Test

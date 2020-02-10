@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Document
@@ -18,7 +17,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(of = { "id" })
-@ToString(of = { "id" })
 @SuperBuilder
 public abstract class BaseEntity implements Serializable {
 

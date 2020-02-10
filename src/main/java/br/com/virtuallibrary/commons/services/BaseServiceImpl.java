@@ -48,17 +48,6 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		}
 	}
 
-	@Override
-	public Optional<UserDetails> getPessoaLogada() {
-		UserDetails userDetails = getUser();
-		if (userDetails.getUsername().equals(ANONYMOUS)) {
-			return Optional.empty();
-		} else {
-			// TODO: Obter o usuário logado.
-			return Optional.empty();
-		}
-	}
-
 	public BaseServiceImpl(R repository) {
 		this.repository = repository;
 		this.entityClass = GenericsUtils.getGenericsInfo(this).getType(0);
@@ -118,7 +107,12 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 			}
 			boolean accessible = declaredField.canAccess(entity);
 			declaredField.setAccessible(true);
-			declaredField.set(entity, updates.get(fieldUpdate));
+			// TODO: Refatorar.
+			if (declaredField.getType().equals(int.class)) {
+				declaredField.set(entity, Integer.valueOf(updates.get(fieldUpdate)));
+			} else {
+				declaredField.set(entity, updates.get(fieldUpdate));
+			}
 			declaredField.setAccessible(accessible);
 		}
 		checkAuditedEntity(entity);
@@ -168,7 +162,6 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (entity instanceof BaseAudit) {
 			BaseAudit auditedEntity = (BaseAudit) entity;
 
-			// Garantir que não vieram informações do front-end.
 			auditedEntity.setCreator(null);
 			auditedEntity.setCreatedAt(null);
 			auditedEntity.setUpdater(null);
@@ -176,8 +169,8 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 
 			Date date = new Date();
 			String login = ANONYMOUS;
-			if (getPessoaLogada().isPresent()) {
-				// TODO: Adicionar o login do usuário.
+			if (getUser() != null) {
+				login = getUser().getUsername();
 			}
 
 			if (auditedEntity.getId() == null) {

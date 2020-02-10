@@ -161,7 +161,7 @@ public class BookControllerTest extends TestBaseController {
 		Map<String, String> fields = new TreeMap<String, String>();
 		fields.put("title", "newTitle");
 		fields.put("author", "newAuthor");
-		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isOk()).getContentAsString();
+		String json = patchHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isOk()).getContentAsString();
 		ObjectMapper mapper = new ObjectMapper();
 		Book obj = mapper.readValue(json, Book.class);
 		assertEquals(obj, ENTITY_01);
@@ -173,7 +173,7 @@ public class BookControllerTest extends TestBaseController {
 		Map<String, String> fields = new TreeMap<String, String>();
 		fields.put("asdas", "newTitle");
 		fields.put("asdasd", "newAuthor");
-		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isBadRequest()).getContentAsString();
+		String json = patchHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isNotFound()).getContentAsString();
 		assertEquals(Constants.BLANK, json);
 	}
 	

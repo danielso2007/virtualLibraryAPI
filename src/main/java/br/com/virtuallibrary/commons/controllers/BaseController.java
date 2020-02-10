@@ -99,8 +99,11 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 			@ApiResponse(code = 404, message = "Registro não encontrado."),
 			@ApiResponse(code = 500, message = "Erro interno do servidor") })
 	public ResponseEntity<E> update(@RequestBody Map<String, String> updates, @PathVariable ID id) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		return service.update(updates, id).map(entity -> ResponseEntity.ok().body(entity))
-				.orElse(ResponseEntity.notFound().build());
+		try {		
+			return service.update(updates, id).map(entity -> ResponseEntity.ok().body(entity)).get();
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 }

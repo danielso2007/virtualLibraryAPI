@@ -12,9 +12,7 @@ import br.com.virtuallibrary.suites.ServicesSuiteTest;
 @SpringBootTest
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ServicesSuiteTest.class,
-        ControllersSuiteTest.class,
-        OtherSuiteTest.class
+        ServicesSuiteTest.class, ControllersSuiteTest.class, OtherSuiteTest.class
 })
 @ActiveProfiles("test")
 public class SuiteTest {

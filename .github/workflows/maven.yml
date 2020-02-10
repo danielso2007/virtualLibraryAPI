@@ -35,7 +35,7 @@ jobs:
         architecture: 'x64'
     - name: Test with Maven
       run: |
-        mvn -q -am clean test jacoco:report
+        mvn -q -am clean test -Ptest jacoco:report
         bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
   Build:
     needs: Test
@@ -49,4 +49,4 @@ jobs:
         architecture: 'x64'
     - name: Build with Maven
       run: |
-        mvn -q clean package install
+        mvn -q -am clean package install

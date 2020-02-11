@@ -6,19 +6,15 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Document
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 @EqualsAndHashCode(of = { "id" })
-@ToString(of = { "id" })
 @SuperBuilder
 public abstract class BaseEntity implements Serializable {
 

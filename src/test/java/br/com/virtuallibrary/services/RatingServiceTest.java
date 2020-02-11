@@ -57,7 +57,9 @@ public class RatingServiceTest {
 
 		when(repository.save(ArgumentMatchers.any())).thenReturn(ENTITY_ID);
 		when(repository.findById(ID)).thenReturn(Optional.of(ENTITY_ID));
+		when(repository.findById(null)).thenReturn(Optional.empty());
 		when(repository.findAll()).thenReturn(list);
+		when(repository.findByBookId(ID)).thenReturn(list);
 	}
 
 	@Test
@@ -162,6 +164,11 @@ public class RatingServiceTest {
 	}
 	
 	@Test
+	public void testUpdateIdNull() {
+		assertTrue(service.update(new Rating(), null).isEmpty());
+	}
+	
+	@Test
 	public void testUpdateEntityMapValuesNull() throws SecurityException, IllegalArgumentException, IllegalAccessException {
 		Map<String, String> updates = new HashMap<String, String>();
 		updates.put("Teste", null);
@@ -175,6 +182,26 @@ public class RatingServiceTest {
 		updates.put("bookId", "lkkk866yytuwetu635");
 		System.out.println(ENTITY_ID);
 		assertTrue(service.update(updates, ID).isPresent());
+	}
+	
+	@Test
+	public void findByBookIdTestBookIdNull() {
+		assertTrue(service.findByBookId(null).isEmpty());
+	}
+	
+	@Test
+	public void findByBookIdTestBookId() {
+		assertTrue("A lista de rating não deve ser vazia", !service.findByBookId(ID).isEmpty());
+	}
+	
+	@Test
+	public void findByBookIdTestBookIdAnything() {
+		assertTrue("A lista de rating deve ser vazia quando ID inválido.", service.findByBookId("jkashd87612837jkashdksadh").isEmpty());
+	}
+	
+	@Test
+	public void testUpdateIdNullMapValues() throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		assertTrue(service.update(new HashMap<String, String>(), null).isEmpty());
 	}
 	
 }

@@ -26,7 +26,9 @@ import br.com.virtuallibrary.commons.entities.BaseAudit;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.BaseRepository;
 import br.com.virtuallibrary.commons.utils.GenericsUtils;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R extends BaseRepository<E, ID>>
 		implements BaseService<E, ID, R> {
 
@@ -43,17 +45,6 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 			return new User(ANONYMOUS, Constants.BLANK, false, false, false, false, new ArrayList<>());
 		} else {
 			return (UserDetails) auth.getPrincipal();
-		}
-	}
-
-	@Override
-	public Optional<UserDetails> getPessoaLogada() {
-		UserDetails userDetails = getUser();
-		if (userDetails.getUsername().equals(ANONYMOUS)) {
-			return Optional.empty();
-		} else {
-			// TODO: Obter o usuário logado.
-			return Optional.empty();
 		}
 	}
 
@@ -80,43 +71,52 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (id == null) {
 			return Optional.empty();
 		}
-		return repository.findById(id);
+		log.debug(String.format("Obtendo registro (%s): %s", getEntityClass().toString(), id));
+		return getRepository().findById(id);
 	}
 
 	@Override
 	public Optional<E> save(E entity) {
 		checkAuditedEntity(entity);
-		Optional<E> opt = Optional.ofNullable(repository.save(entity));
+		log.debug(String.format("Salvando registro %s.", getEntityClass().toString()));
+		Optional<E> opt = Optional.ofNullable(getRepository().save(entity));
 		return opt;
 	}
 
 	@Override
 	public void delete(ID id) {
+		log.debug(String.format("Deletando registro (%s): %s", getEntityClass().toString(), id));
 		repository.deleteById(id);
 	}
 
 	@Override
 	public Optional<E> update(Map<String, String> updates, ID id)
 			throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Optional<E> opt = repository.findById(id);
+		Optional<E> opt = getRepository().findById(id);
 		if (opt.isEmpty()) {
 			return Optional.empty();
 		}
+		log.debug(String.format("Atualizando campos do registro (%s): %s", entityClass.toString(), id));
 		E entity = opt.get();
 		for (String fieldUpdate : updates.keySet()) {
 			Field declaredField;
 			try {
-				declaredField = entityClass.getDeclaredField(fieldUpdate);
+				declaredField = getEntityClass().getDeclaredField(fieldUpdate);
 			} catch (NoSuchFieldException e) {
 				throw new ValidationException(String.format(O_CAMPO_S_NAO_EXISTE_FORMAT, fieldUpdate));
 			}
 			boolean accessible = declaredField.canAccess(entity);
 			declaredField.setAccessible(true);
-			declaredField.set(entity, updates.get(fieldUpdate));
+			// TODO: Refatorar.
+			if (declaredField.getType().equals(int.class)) {
+				declaredField.set(entity, Integer.valueOf(updates.get(fieldUpdate)));
+			} else {
+				declaredField.set(entity, updates.get(fieldUpdate));
+			}
 			declaredField.setAccessible(accessible);
 		}
 		checkAuditedEntity(entity);
-		return Optional.of(repository.save(entity));
+		return Optional.of(getRepository().save(entity));
 	}
 
 	@Override
@@ -124,7 +124,8 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (entity == null) {
 			throw new IllegalArgumentException(A_ENTIDADE_NAO_PODE_SER_NULA);
 		}
-		Optional<E> opt = repository.findById(id);
+		log.debug(String.format("Atualizando registro (%s): %s", getEntityClass().toString(), id));
+		Optional<E> opt = getRepository().findById(id);
 		if (opt.isEmpty()) {
 			return Optional.empty();
 		}
@@ -161,7 +162,6 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (entity instanceof BaseAudit) {
 			BaseAudit auditedEntity = (BaseAudit) entity;
 
-			// Garantir que não vieram informações do front-end.
 			auditedEntity.setCreator(null);
 			auditedEntity.setCreatedAt(null);
 			auditedEntity.setUpdater(null);
@@ -169,8 +169,8 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 
 			Date date = new Date();
 			String login = ANONYMOUS;
-			if (getPessoaLogada().isPresent()) {
-				// TODO: Adicionar o login do usuário.
+			if (getUser() != null) {
+				login = getUser().getUsername();
 			}
 
 			if (auditedEntity.getId() == null) {

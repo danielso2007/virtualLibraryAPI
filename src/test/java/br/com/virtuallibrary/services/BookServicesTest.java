@@ -59,6 +59,7 @@ public class BookServicesTest {
 
 		when(repository.save(ArgumentMatchers.any())).thenReturn(ENTITY_ID);
 		when(repository.findById(ID)).thenReturn(Optional.of(ENTITY_ID));
+		when(repository.findById(null)).thenReturn(Optional.empty());
 		when(repository.findAll()).thenReturn(list);
 	}
 
@@ -105,13 +106,13 @@ public class BookServicesTest {
 	public void testSaveEntity() {
 		assertTrue(service.save(ENTITY).isPresent());
 	}
-	
+
 	@Test
 	public void testSaveEntityAuditCreatedAt() {
 		service.save(ENTITY);
 		assertNotNull(ENTITY.getCreatedAt());
 	}
-	
+
 	@Test
 	public void testSaveEntityAuditCreator() {
 		service.save(ENTITY);
@@ -134,22 +135,22 @@ public class BookServicesTest {
 	public void testUpdateEntityIDInvalid() {
 		assertTrue(service.update(new Book(), "ASKDJHASKJ").isEmpty());
 	}
-	
+
 	@Test
 	public void testUpdateEntity() {
-		BookBuilder<?,?> entity = Book.builder();
+		BookBuilder<?, ?> entity = Book.builder();
 		entity.author(PHILIP_ROTH);
 		entity.title(LETTING_GO);
 		Book book = entity.build();
 		assertTrue(service.update(book, ID).isPresent());
 	}
-	
+
 	@Test
 	public void testUpdateEntityUpdatedAt() {
 		service.update(ENTITY_ID, ID);
 		assertNotNull(ENTITY_ID.getUpdatedAt());
 	}
-	
+
 	@Test
 	public void testUpdateEntityUpdater() {
 		service.update(ENTITY_ID, ID);
@@ -164,19 +165,30 @@ public class BookServicesTest {
 	}
 	
 	@Test
-	public void testUpdateEntityMapValuesNull() throws SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void testUpdateIdNull() {
+		assertTrue(service.update(new Book(), null).isEmpty());
+	}
+
+	@Test
+	public void testUpdateEntityMapValuesNull()
+			throws SecurityException, IllegalArgumentException, IllegalAccessException {
 		Map<String, String> updates = new HashMap<String, String>();
 		updates.put("Teste", null);
 		Exception exception = assertThrows(ValidationException.class, () -> service.update(updates, ID));
 		assertTrue(exception.getMessage().equals(String.format("O campo %s não existe.", "Teste")));
 	}
-	
+
 	@Test
 	public void testUpdateEntityMapValues() throws SecurityException, IllegalArgumentException, IllegalAccessException {
 		Map<String, String> updates = new HashMap<String, String>();
 		updates.put("author", PHILIP_ROTH);
 		System.out.println(ENTITY_ID);
 		assertTrue(service.update(updates, ID).isPresent());
+	}
+	
+	@Test
+	public void testUpdateIdNullMapValues() throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		assertTrue(service.update(new HashMap<String, String>(), null).isEmpty());
 	}
 
 }

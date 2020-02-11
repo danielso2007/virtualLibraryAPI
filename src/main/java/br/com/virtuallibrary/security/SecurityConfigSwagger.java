@@ -15,16 +15,16 @@ import br.com.virtuallibrary.commons.Constants;
 import br.com.virtuallibrary.enums.Roles;
 
 /**
- * Rating security. Anyone can read resources. Only admins can modify resources.
+ * Book security. Anyone can read resources. Only admins can modify resources.
  * 
  * @author daniel
  */
 @EnableWebSecurity
 @Configuration
-@Order(value = 1)
-public class SecurityConfigRating extends WebSecurityConfigurerAdapter {
+@Order(value = 2)
+public class SecurityConfigSwagger extends WebSecurityConfigurerAdapter {
 
-	private static final String PATH = Constants.ROOT_URL + Constants.V1 + "ratings";
+	private static final String PATH = Constants.ROOT_URL + Constants.V1 + "books";
 
 	@Autowired
 	public void configureGlobal1(AuthenticationManagerBuilder auth) throws Exception {
@@ -44,7 +44,6 @@ public class SecurityConfigRating extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.httpBasic().and()
 		        .authorizeRequests()
-				.regexMatchers("^/ratings\\?bookId.*$").permitAll()
 				.antMatchers(HttpMethod.GET, PATH + "/**").hasAnyRole(Roles.USER.toString(), Roles.ADMIN.toString())
 				.antMatchers(HttpMethod.POST, PATH).hasRole(Roles.ADMIN.toString())
 				.antMatchers(HttpMethod.PUT, PATH + "/**").hasRole(Roles.ADMIN.toString())

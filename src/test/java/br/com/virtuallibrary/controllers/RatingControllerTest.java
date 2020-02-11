@@ -40,6 +40,7 @@ public class RatingControllerTest extends TestBaseController {
 	private final String ID = "5dc4c9734e9b1214ed7a9e8a";
 	private Rating ENTITY_01;
 	private Rating ENTITY_02;
+	private List<Rating> list;
 	
 	@MockBean
 	private RatingRepository repository;
@@ -60,13 +61,14 @@ public class RatingControllerTest extends TestBaseController {
 		ENTITY_01 = Rating.builder().bookId("kjasdh6753hsf27634").stars(3).build();
 		ENTITY_02 = Rating.builder().bookId("asgd5555423gsdjhkk").stars(4).build();
 
-		List<Rating> list = new ArrayList<>();
+		list = new ArrayList<>();
 		list.add(ENTITY_01);
 		list.add(ENTITY_02);
 
 		when(repository.save(ArgumentMatchers.any())).thenReturn(ENTITY_01);
 		when(repository.findById(anyString())).thenReturn(Optional.of(ENTITY_01));
 		when(repository.findAll()).thenReturn(list);
+		when(repository.findByBookId(ID)).thenReturn(list);
 	}
 	
 	@Test
@@ -78,10 +80,13 @@ public class RatingControllerTest extends TestBaseController {
 	@Test
 	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
 	public void testGetAll() throws Exception {
-		List<Rating> list = new ArrayList<>();
-		list.add(ENTITY_01);
-		list.add(ENTITY_02);
 		assertEquals(getHttpServletResponse(API, status().isOk()).getContentAsString(), jsonList.write(list).getJson());
+	}
+	
+	@Test
+	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
+	public void testGetAllBookId() throws Exception {
+		assertEquals(getHttpServletResponse(String.format("%s?bookId=%s", API, ID), status().isOk()).getContentAsString(), jsonList.write(list).getJson());
 	}
 	
 	@Test
@@ -161,7 +166,7 @@ public class RatingControllerTest extends TestBaseController {
 		Map<String, String> fields = new TreeMap<String, String>();
 		fields.put("bookId", "kasdlkas63573sjd");
 		fields.put("stars", "3");
-		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isOk()).getContentAsString();
+		String json = patchHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isOk()).getContentAsString();
 		ObjectMapper mapper = new ObjectMapper();
 		Rating obj = mapper.readValue(json, Rating.class);
 		assertEquals(obj, ENTITY_01);
@@ -173,7 +178,7 @@ public class RatingControllerTest extends TestBaseController {
 		Map<String, String> fields = new TreeMap<String, String>();
 		fields.put("asdas", "newEqwe");
 		fields.put("asdasd", "newTWER");
-		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isBadRequest()).getContentAsString();
+		String json = patchHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isNotFound()).getContentAsString();
 		assertEquals(Constants.BLANK, json);
 	}
 	

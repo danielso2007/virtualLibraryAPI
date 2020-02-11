@@ -10,6 +10,12 @@ server:
             enabled: false
             pattern: '%t %a "%r" %s (%D ms)'
 spring:
+    security:
+        user:
+            name: user
+            password: password
+        autoconfigure:
+            exclude: org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration
     application:
         name: '@projet.artifactId@'
     autoconfigure:

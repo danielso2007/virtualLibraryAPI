@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>br.com.virtuallibrary</groupId>
 	<artifactId>virtualLibraryAPI</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<name>virtualLibraryAPI</name>
 	<description>Study of Java REST and Spring Boot projects.</description>
 

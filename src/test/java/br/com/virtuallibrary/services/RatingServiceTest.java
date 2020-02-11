@@ -199,4 +199,9 @@ public class RatingServiceTest {
 		assertTrue("A lista de rating deve ser vazia quando ID inválido.", service.findByBookId("jkashd87612837jkashdksadh").isEmpty());
 	}
 	
+	@Test
+	public void testUpdateIdNullMapValues() throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		assertTrue(service.update(new HashMap<String, String>(), null).isEmpty());
+	}
+	
 }

@@ -49,10 +49,25 @@ public class RatingTest {
 	public void testEqualsObjectBook() {
 		assertTrue(entity.equals(entity));
 	}
+	
+	@Test
+	public void testEqualsObjectNoRating() {
+		assertTrue(!entity.equals(Integer.getInteger("12")));
+	}
 
 	@Test
 	public void testEqualsNewBook() {
 		assertTrue(!entity.equals(Rating.builder().build()));
+	}
+	
+	@Test
+	public void testBuildToString() {
+		assertNotNull(Rating.builder().toString());
+	}
+	
+	@Test
+	public void testAllArgsConstructor() {
+		assertNotNull(new Rating("AKSJDHKASJDH", 5));
 	}
 
 }

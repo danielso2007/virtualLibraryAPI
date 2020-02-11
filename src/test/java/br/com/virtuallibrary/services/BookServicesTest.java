@@ -185,5 +185,10 @@ public class BookServicesTest {
 		System.out.println(ENTITY_ID);
 		assertTrue(service.update(updates, ID).isPresent());
 	}
+	
+	@Test
+	public void testUpdateIdNullMapValues() throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		assertTrue(service.update(new HashMap<String, String>(), null).isEmpty());
+	}
 
 }

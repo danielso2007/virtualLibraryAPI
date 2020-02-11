@@ -1,5 +1,6 @@
 package br.com.virtuallibrary.othertests;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.Before;
@@ -28,6 +29,11 @@ public class GenericsInfoTest {
 		genericsInfo = GenericsUtils.getGenericsInfo(service);
 	}
 
+	@Test
+	public void testGenericsInfo() {
+		assertNotNull(GenericsUtils.getGenericsInfo(service));
+	}
+	
 	@Test
 	public void testGetTypeInt() {
 		assertEquals(genericsInfo.getType(0), Book.class);

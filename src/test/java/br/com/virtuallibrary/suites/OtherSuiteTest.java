@@ -10,8 +10,8 @@ import br.com.virtuallibrary.othertests.RolesTest;
 import br.com.virtuallibrary.othertests.VirtualLibraryApiApplicationTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ RolesTest.class, VirtualLibraryApiApplicationTest.class, GenericsInfoTest.class, BookTest.class,
-		RatingTest.class })
+@Suite.SuiteClasses({ RolesTest.class, GenericsInfoTest.class, BookTest.class, RatingTest.class,
+		VirtualLibraryApiApplicationTest.class })
 public class OtherSuiteTest {
 
 }

@@ -19,10 +19,6 @@ public class GenericsUtils {
 	private static Class<?>[] findGenericTypes(Object instance) {
 		Type type = instance.getClass().getGenericSuperclass();
 
-		if (!(type instanceof ParameterizedType)) {
-			type = instance.getClass().getSuperclass().getGenericSuperclass();
-		}
-
 		ParameterizedType genericType = (ParameterizedType) type;
 		int numParams = genericType.getActualTypeArguments().length;
 

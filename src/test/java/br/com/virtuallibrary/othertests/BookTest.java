@@ -49,9 +49,24 @@ public class BookTest {
 	public void testEqualsObjectBook() {
 		assertTrue(entity.equals(entity));
 	}
+	
+	@Test
+	public void testEqualsObjectNoBook() {
+		assertTrue(!entity.equals(Integer.getInteger("12")));
+	}
 
 	@Test
 	public void testEqualsNewBook() {
 		assertTrue(!entity.equals(Book.builder().build()));
+	}
+	
+	@Test
+	public void testBuildToString() {
+		assertNotNull(Book.builder().toString());
+	}
+	
+	@Test
+	public void testAllArgsConstructor() {
+		assertNotNull(new Book("AKSJDH", "KLASDJKL"));
 	}
 }

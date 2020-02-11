@@ -71,28 +71,28 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (id == null) {
 			return Optional.empty();
 		}
-		log.debug(String.format("Obtendo registro (%s): %s", entityClass.toString(), id));
-		return repository.findById(id);
+		log.debug(String.format("Obtendo registro (%s): %s", getEntityClass().toString(), id));
+		return getRepository().findById(id);
 	}
 
 	@Override
 	public Optional<E> save(E entity) {
 		checkAuditedEntity(entity);
-		log.debug(String.format("Salvando registro %s.", entityClass.toString()));
-		Optional<E> opt = Optional.ofNullable(repository.save(entity));
+		log.debug(String.format("Salvando registro %s.", getEntityClass().toString()));
+		Optional<E> opt = Optional.ofNullable(getRepository().save(entity));
 		return opt;
 	}
 
 	@Override
 	public void delete(ID id) {
-		log.debug(String.format("Deletando registro (%s): %s", entityClass.toString(), id));
+		log.debug(String.format("Deletando registro (%s): %s", getEntityClass().toString(), id));
 		repository.deleteById(id);
 	}
 
 	@Override
 	public Optional<E> update(Map<String, String> updates, ID id)
 			throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Optional<E> opt = repository.findById(id);
+		Optional<E> opt = getRepository().findById(id);
 		if (opt.isEmpty()) {
 			return Optional.empty();
 		}
@@ -101,7 +101,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		for (String fieldUpdate : updates.keySet()) {
 			Field declaredField;
 			try {
-				declaredField = entityClass.getDeclaredField(fieldUpdate);
+				declaredField = getEntityClass().getDeclaredField(fieldUpdate);
 			} catch (NoSuchFieldException e) {
 				throw new ValidationException(String.format(O_CAMPO_S_NAO_EXISTE_FORMAT, fieldUpdate));
 			}
@@ -116,7 +116,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 			declaredField.setAccessible(accessible);
 		}
 		checkAuditedEntity(entity);
-		return Optional.of(repository.save(entity));
+		return Optional.of(getRepository().save(entity));
 	}
 
 	@Override
@@ -124,8 +124,8 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		if (entity == null) {
 			throw new IllegalArgumentException(A_ENTIDADE_NAO_PODE_SER_NULA);
 		}
-		log.debug(String.format("Atualizando registro (%s): %s", entityClass.toString(), id));
-		Optional<E> opt = repository.findById(id);
+		log.debug(String.format("Atualizando registro (%s): %s", getEntityClass().toString(), id));
+		Optional<E> opt = getRepository().findById(id);
 		if (opt.isEmpty()) {
 			return Optional.empty();
 		}

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +25,7 @@ import br.com.virtuallibrary.commons.services.BaseService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Recurso básico com endpoints de CRUD.
@@ -33,16 +36,23 @@ import io.swagger.annotations.ApiResponses;
  * @param <R> Representa o repositório do entidade.
  * @param <S> Representa o serviço da entidade.
  */
-public class BaseController<E extends BaseEntity, ID extends Serializable, R extends BaseRepository<E, ID>, S extends BaseService<E, ID, R>> {
+@Slf4j
+public class BaseController<E extends BaseEntity, ID extends Serializable, R extends BaseRepository<E, ID>, S extends BaseService<E, ID, R>, M extends RepresentationModel<M>> {
 
 	private final S service;
+	private final RepresentationModelAssemblerSupport<E, M> modelAssembler;
 
-	public BaseController(S service) {
+	public BaseController(S service, RepresentationModelAssemblerSupport<E, M> modelAssembler) {
 		this.service = service;
+		this.modelAssembler = modelAssembler;
 	}
 
-	public S getService() {
+	public final S getService() {
 		return service;
+	}
+	
+	public RepresentationModelAssemblerSupport<E, M> getModelAssembler() {
+		return this.modelAssembler;
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -51,9 +61,11 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Registro carregado com sucesso."),
 			@ApiResponse(code = 404, message = "Registro não encontrado."),
 			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<E> find(@PathVariable ID id) {
-		return service.findById(id).map(entity -> ResponseEntity.ok().body(entity))
-				.orElse(ResponseEntity.notFound().build());
+	public ResponseEntity<M> find(@PathVariable ID id) {
+		return service.findById(id) 
+		.map(modelAssembler::toModel) 
+		.map(ResponseEntity::ok) 
+		.orElse(ResponseEntity.notFound().build());
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
@@ -62,8 +74,10 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Registro criado com sucesso"),
 			@ApiResponse(code = 404, message = "Não foi possível cadastrar o registro."),
 			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<E> create(@RequestBody @Valid E object) {
-		return service.save(object).map(entity -> ResponseEntity.status(HttpStatus.CREATED).body(entity))
+	public ResponseEntity<M> create(@RequestBody @Valid E object) {
+		return service.save(object)
+				.map(modelAssembler::toModel) 
+				.map(entity -> ResponseEntity.status(HttpStatus.CREATED).body(entity)) 
 				.orElse(ResponseEntity.notFound().build());
 	}
 
@@ -86,8 +100,10 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Registro atualizado com sucesso"),
 			@ApiResponse(code = 404, message = "Registro não encontrado."),
 			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<E> update(@RequestBody @Valid E object, @PathVariable ID id) {
-		return service.update(object, id).map(entity -> ResponseEntity.ok().body(entity))
+	public ResponseEntity<M> update(@RequestBody @Valid E object, @PathVariable ID id) {
+		return service.update(object, id)
+				.map(modelAssembler::toModel) 
+				.map(ResponseEntity::ok) 
 				.orElse(ResponseEntity.notFound().build());
 
 	}
@@ -98,10 +114,14 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Registro atualizado com sucesso"),
 			@ApiResponse(code = 404, message = "Registro não encontrado."),
 			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<E> update(@RequestBody Map<String, String> updates, @PathVariable ID id) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		try {		
-			return service.update(updates, id).map(entity -> ResponseEntity.ok().body(entity)).get();
+	public ResponseEntity<M> update(@RequestBody Map<String, String> updates, @PathVariable ID id) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		try {
+			return service.update(updates, id)
+			.map(modelAssembler::toModel) 
+			.map(ResponseEntity::ok) 
+			.orElse(ResponseEntity.notFound().build());
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 			return ResponseEntity.notFound().build();
 		}
 	}

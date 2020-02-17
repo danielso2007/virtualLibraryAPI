@@ -21,7 +21,13 @@ public interface Constants {
 	String HIFEN = "-";
 	String SLASH = "/";
 	String BACKSLASH = "\\";
+	
+	String defaultPage = "0";
+	String defaultSize = "5";
 
 	String V1 = "v1/";
 	String ROOT_URL = "/api/";
+	
+	String BOOKS = Constants.ROOT_URL + Constants.V1 + "books";
+	String RATINGS= Constants.ROOT_URL + Constants.V1 + "ratings";
 }

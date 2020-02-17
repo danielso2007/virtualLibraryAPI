@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 import br.com.virtuallibrary.commons.entities.BaseAudit;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,6 +22,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Document
+@JsonRootName(value = "rating")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(value = Include.NON_NULL)
 @Validated

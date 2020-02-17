@@ -1,38 +1,42 @@
 debug: '@debug.properties@'
-server:
-    compression:
-        enabled: true
-        min-response-size: 1
-    port: ${SERVER_PORT:@port@}
-    undertow:
-        accesslog:
-            dir: logs
-            enabled: false
-            pattern: '%t %a "%r" %s (%D ms)'
-spring:
-    security:
-        user:
-            name: user
-            password: password
-        autoconfigure:
-            exclude: org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration
-    application:
-        name: '@projet.artifactId@'
-    autoconfigure:
-        exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-    data:
-        mongodb:
-            authentication-database: admin
-            database: ${MONGO_DATABASE:@mongodb.database@}
-            host: ${MONGO_HOST:@mongodb.host@}
-            password: ${MONGO_PASSWORD:@mongodb.password@}
-            port: ${MONGO_PORT:@mongodb.port@}
-            username: ${MONGO_USERNAME:@mongodb.username@}
-    jackson:
-        date-format: yyyy-MM-dd HH:mm:ss
-        default-property-inclusion: NON_NULL
-        locale: pt-BR
-        time-zone: America/Sao_Paulo
-    profiles:
-        active: '@spring.profiles.active@'
 trace: '@trace.properties@'
+logging:
+   level:
+      org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+      s7.Application: WARN
+server:
+   compression:
+      enabled: true
+      min-response-size: 1
+   port: ${SERVER_PORT:@port@}
+   undertow:
+      accesslog:
+         dir: logs
+         enabled: false
+         pattern: '%t %a "%r" %s (%D ms)'
+spring:
+   security:
+      user:
+         name: ${API_USER:admin}
+         password: ${API_PASSWORD:admin}
+      autoconfigure:
+         exclude: org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration
+   application:
+      name: '@projet.artifactId@'
+   autoconfigure:
+      exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+   data:
+      mongodb:
+         authentication-database: admin
+         database: ${MONGO_DATABASE:@mongodb.database@}
+         host: ${MONGO_HOST:@mongodb.host@}
+         password: ${MONGO_PASSWORD:@mongodb.password@}
+         port: ${MONGO_PORT:@mongodb.port@}
+         username: ${MONGO_USERNAME:@mongodb.username@}
+   jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      default-property-inclusion: NON_NULL
+      locale: pt-BR
+      time-zone: America/Sao_Paulo
+   profiles:
+      active: '@spring.profiles.active@'

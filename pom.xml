@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>6.1.2.Final</version><!--$NO-MVN-MAN-VER$-->
+			<version>6.1.2.Final</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 
 
@@ -93,6 +93,18 @@
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+			<version>2.2.4.RELEASE</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
+
 
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -246,12 +258,12 @@
 										<limit implementation="org.jacoco.report.check.Limit">
 											<counter>INSTRUCTION</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.90</minimum>
+											<minimum>0.85</minimum>
 										</limit>
 										<limit>
 											<counter>COMPLEXITY</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.70</minimum>
+											<minimum>0.65</minimum>
 										</limit>
 									</limits>
 								</rule>
@@ -410,5 +422,40 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<developers>
+		<developer>
+			<id>danielso2007</id>
+			<name>Daniel Oliveira</name>
+			<email>danielso2007@gmail.com</email>
+			<organization>Em casa</organization>
+			<roles>
+				<role>Project Lead</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+			<comments>
+				Copyright 2017-2019 the original author or authors.
+
+				Licensed under the Apache License, Version 2.0 (the "License");
+				you may not use this file except in compliance with the License.
+				You may obtain a copy of the License at
+
+				https://www.apache.org/licenses/LICENSE-2.0
+
+				Unless required by applicable law or agreed to in writing, software
+				distributed under the License is distributed on an "AS IS" BASIS,
+				WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+				implied.
+				See the License for the specific language governing permissions and
+				limitations under the License.
+			</comments>
+		</license>
+	</licenses>
 
 </project>

@@ -1,13 +1,20 @@
 package br.com.virtuallibrary.config;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.hateoas.client.LinkDiscoverer;
+import org.springframework.hateoas.client.LinkDiscoverers;
+import org.springframework.hateoas.mediatype.collectionjson.CollectionJsonLinkDiscoverer;
+import org.springframework.plugin.core.SimplePluginRegistry;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.PathSelectors;
@@ -28,8 +35,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
-public class SwaggerConfig {
+public class SwaggerConfig extends WebMvcConfigurationSupport {
 
+	// Para corrigir o problema com o spring-boot-starter-hateoas
+	@Bean
+    public LinkDiscoverers discoverers() {
+        List<LinkDiscoverer> plugins = new ArrayList<>();
+        plugins.add(new CollectionJsonLinkDiscoverer());
+        return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
+    }
+	
     @Bean
     public Docket api() {
         List<ResponseMessage> list = new java.util.ArrayList<>();
@@ -61,6 +76,7 @@ public class SwaggerConfig {
                 .globalResponseMessage(RequestMethod.POST, list)
                 .globalResponseMessage(RequestMethod.PUT, list)
                 .globalResponseMessage(RequestMethod.DELETE, list)
+                .globalResponseMessage(RequestMethod.PATCH, list)
                 .apiInfo(apiInfo());
     }
 
@@ -72,6 +88,15 @@ public class SwaggerConfig {
                 "https://smartbear.com/terms-of-use/",
                 new Contact("Daniel Oliveira", "", "danielso2007@gmail.com"),
                 "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0.html", Collections.emptyList());
+    }
+    
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+      registry.addResourceHandler("swagger-ui.html")
+          .addResourceLocations("classpath:/META-INF/resources/");
+
+      registry.addResourceHandler("/webjars/**")
+          .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
 }

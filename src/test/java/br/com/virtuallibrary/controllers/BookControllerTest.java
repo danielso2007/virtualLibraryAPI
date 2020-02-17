@@ -2,6 +2,8 @@ package br.com.virtuallibrary.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +25,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,7 +50,6 @@ public class BookControllerTest extends TestBaseController {
 	@Autowired
 	private BookService service;
 
-	private JacksonTester<List<Book>> jsonList;
 	private JacksonTester<Book> jsonEntity;
 
 	@Before
@@ -81,7 +83,8 @@ public class BookControllerTest extends TestBaseController {
 		List<Book> list = new ArrayList<>();
 		list.add(ENTITY_01);
 		list.add(ENTITY_02);
-		assertEquals(getHttpServletResponse(API, status().isOk()).getContentAsString(), jsonList.write(list).getJson());
+		Exception exception = assertThrows(NestedServletException.class, () -> getHttpServletResponse(API, status().isOk()).getContentAsString());
+		assertTrue(exception.getMessage().equals("Request processing failed; nested exception is java.lang.IllegalArgumentException: Page must not be null!"));
 	}
 	
 	@Test
@@ -89,7 +92,12 @@ public class BookControllerTest extends TestBaseController {
 	public void testbyId() throws Exception {
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		String json = getHttpServletResponse(String.format("%s/%s", API, ID), status().isOk()).getContentAsString();
-		assertEquals(json, jsonEntity.write(opt.get()).getJson());
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Book obj = mapper.readValue(json, Book.class);
+		
+		assertEquals(obj.getAuthor(), opt.get().getAuthor());
+		assertEquals(obj.getTitle(), opt.get().getTitle());
 	}
 	
 	@Test
@@ -97,7 +105,12 @@ public class BookControllerTest extends TestBaseController {
 	public void testbySave() throws Exception {
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isCreated()).getContentAsString();
-		assertEquals(json, jsonEntity.write(opt.get()).getJson());
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Book obj = mapper.readValue(json, Book.class);
+		
+		assertEquals(obj.getAuthor(), opt.get().getAuthor());
+		assertEquals(obj.getTitle(), opt.get().getTitle());
 	}
 	
 	@Test

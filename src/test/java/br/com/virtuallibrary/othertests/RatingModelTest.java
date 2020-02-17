@@ -7,19 +7,16 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.virtuallibrary.entity.Rating;
+import br.com.virtuallibrary.rest.hateoas.model.RatingModel;
 
-@RunWith(SpringRunner.class)
-public class RatingTest {
+public class RatingModelTest {
 
-	private Rating entity;
+	private RatingModel entity;
 
 	@Before
 	public void setUp() throws Exception {
-		entity = Rating.builder()
+		entity = RatingModel.builder()
 				.id("KJASHDKJSAHD")
 				.bookId("ASLKDJSALKDJ")
 				.stars(5)
@@ -52,23 +49,23 @@ public class RatingTest {
 	
 	@SuppressWarnings("unlikely-arg-type")
 	@Test
-	public void testEqualsObjectNoRating() {
+	public void testEqualsObjectNoRatingModel() {
 		assertTrue(!entity.equals(Integer.getInteger("12")));
 	}
 
 	@Test
 	public void testEqualsNewBook() {
-		assertTrue(!entity.equals(Rating.builder().build()));
+		assertTrue(!entity.equals(RatingModel.builder().build()));
 	}
 	
 	@Test
 	public void testBuildToString() {
-		assertNotNull(Rating.builder().toString());
+		assertNotNull(RatingModel.builder().toString());
 	}
 	
 	@Test
 	public void testAllArgsConstructor() {
-		assertNotNull(new Rating("AKSJDHKASJDH", 5));
+		assertNotNull(new RatingModel("asdkkl", "AKSJDHKASJDH", 5, new Date(), "asd", new Date(), "asd"));
 	}
 
 }

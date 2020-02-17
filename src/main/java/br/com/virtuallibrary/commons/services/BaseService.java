@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.validation.ValidationException;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.virtuallibrary.commons.entities.BaseEntity;
@@ -16,6 +17,8 @@ public interface BaseService<E extends BaseEntity, ID extends Serializable, R ex
 
 	List<E> findAll();
 
+	Page<E> findPaginated(int page, int size);
+	
 	Optional<E> findById(ID id);
 
 	Optional<E> save(E object);

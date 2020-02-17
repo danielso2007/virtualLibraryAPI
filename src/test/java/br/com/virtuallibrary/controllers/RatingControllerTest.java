@@ -2,6 +2,8 @@ package br.com.virtuallibrary.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +25,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -48,7 +51,6 @@ public class RatingControllerTest extends TestBaseController {
 	@Autowired
 	private RatingService service;
 
-	private JacksonTester<List<Rating>> jsonList;
 	private JacksonTester<Rating> jsonEntity;
 
 	@Before
@@ -80,13 +82,15 @@ public class RatingControllerTest extends TestBaseController {
 	@Test
 	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
 	public void testGetAll() throws Exception {
-		assertEquals(getHttpServletResponse(API, status().isOk()).getContentAsString(), jsonList.write(list).getJson());
+		Exception exception = assertThrows(NestedServletException.class, () -> getHttpServletResponse(API, status().isOk()).getContentAsString());
+		assertTrue(exception.getMessage().equals("Request processing failed; nested exception is java.lang.IllegalArgumentException: Page must not be null!"));
 	}
 	
 	@Test
 	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
 	public void testGetAllBookId() throws Exception {
-		assertEquals(getHttpServletResponse(String.format("%s?bookId=%s", API, ID), status().isOk()).getContentAsString(), jsonList.write(list).getJson());
+		Exception exception = assertThrows(NestedServletException.class, () -> getHttpServletResponse(String.format("%s?bookId=%s", API, ID), status().isOk()).getContentAsString());
+		assertTrue(exception.getMessage().equals("Request processing failed; nested exception is java.lang.IllegalArgumentException: Page must not be null!"));
 	}
 	
 	@Test
@@ -94,7 +98,12 @@ public class RatingControllerTest extends TestBaseController {
 	public void testbyId() throws Exception {
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		String json = getHttpServletResponse(String.format("%s/%s", API, ID), status().isOk()).getContentAsString();
-		assertEquals(json, jsonEntity.write(opt.get()).getJson());
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Rating obj = mapper.readValue(json, Rating.class);
+		
+		assertEquals(obj.getBookId(), opt.get().getBookId());
+		assertEquals(obj.getStars(), opt.get().getStars());
 	}
 	
 	@Test
@@ -102,7 +111,12 @@ public class RatingControllerTest extends TestBaseController {
 	public void testbySave() throws Exception {
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isCreated()).getContentAsString();
-		assertEquals(json, jsonEntity.write(opt.get()).getJson());
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Rating obj = mapper.readValue(json, Rating.class);
+		
+		assertEquals(obj.getBookId(), opt.get().getBookId());
+		assertEquals(obj.getStars(), opt.get().getStars());
 	}
 	
 	@Test

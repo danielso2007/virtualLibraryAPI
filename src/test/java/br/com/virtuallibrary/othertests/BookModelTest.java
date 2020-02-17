@@ -10,19 +10,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.virtuallibrary.entity.Rating;
+import br.com.virtuallibrary.rest.hateoas.model.BookModel;
 
 @RunWith(SpringRunner.class)
-public class RatingTest {
+public class BookModelTest {
 
-	private Rating entity;
-
+	private BookModel entity;
+	
 	@Before
 	public void setUp() throws Exception {
-		entity = Rating.builder()
-				.id("KJASHDKJSAHD")
-				.bookId("ASLKDJSALKDJ")
-				.stars(5)
+		entity = BookModel.builder()
+				.author("XST")
+				.title("KJASD")
+				.id("HSJD")
 				.createdAt(new Date())
 				.creator("user")
 				.updatedAt(new Date())
@@ -39,36 +39,35 @@ public class RatingTest {
 	public void testEqualsObjectNull() {
 		assertTrue(!entity.equals(null));
 	}
-
+	
 	@Test
 	public void testEqualsObjectNew() {
 		assertTrue(!entity.equals(new Object()));
 	}
-
+	
 	@Test
-	public void testEqualsObjectBook() {
+	public void testEqualsObjectBookModel() {
 		assertTrue(entity.equals(entity));
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	@Test
-	public void testEqualsObjectNoRating() {
+	public void testEqualsObjectNoBookModel() {
 		assertTrue(!entity.equals(Integer.getInteger("12")));
 	}
 
 	@Test
-	public void testEqualsNewBook() {
-		assertTrue(!entity.equals(Rating.builder().build()));
+	public void testEqualsNewBookModel() {
+		assertTrue(!entity.equals(BookModel.builder().build()));
 	}
 	
 	@Test
 	public void testBuildToString() {
-		assertNotNull(Rating.builder().toString());
+		assertNotNull(BookModel.builder().toString());
 	}
 	
 	@Test
 	public void testAllArgsConstructor() {
-		assertNotNull(new Rating("AKSJDHKASJDH", 5));
+		assertNotNull(new BookModel("AKSJDH", "KLASDJKL", "asd", new Date(), "asd", new Date(), "asd"));
 	}
 
 }

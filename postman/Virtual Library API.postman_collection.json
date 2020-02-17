@@ -26,7 +26,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/books",
+					"raw": "http://localhost:8080/api/v1/books?page=0&size=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -36,24 +36,34 @@
 						"api",
 						"v1",
 						"books"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						}
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Rating",
+			"name": "Ratings",
 			"request": {
 				"auth": {
 					"type": "basic",
 					"basic": [
 						{
-							"key": "username",
+							"key": "password",
 							"value": "admin",
 							"type": "string"
 						},
 						{
-							"key": "password",
+							"key": "username",
 							"value": "admin",
 							"type": "string"
 						}
@@ -62,7 +72,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/ratings",
+					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -72,6 +82,16 @@
 						"api",
 						"v1",
 						"ratings"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						}
 					]
 				}
 			},
@@ -106,7 +126,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"author\":\"Teste\",\n\t\"title\":\"Teste2\"\n}",
+					"raw": "{\n\t\"author\":\"J. K. Rowling\",\n\t\"title\":\"Harry Potter\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -130,7 +150,7 @@
 			"response": []
 		},
 		{
-			"name": "Find by ID",
+			"name": "Find Book by ID",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -150,7 +170,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/books/5e3270e3ae86b0615fd42cee",
+					"raw": "http://localhost:8080/api/v1/books/5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -160,7 +180,29 @@
 						"api",
 						"v1",
 						"books",
-						"5e3270e3ae86b0615fd42cee"
+						"5dc4c9734e9b1214ed7a9e3a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Rating by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/ratings/5e3b92162f89a422faa31230",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ratings",
+						"5e3b92162f89a422faa31230"
 					]
 				}
 			},
@@ -187,7 +229,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/books/5e3b859ac513d124ea6006aa",
+					"raw": "http://localhost:8080/api/v1/books/5e4a2cb278e48f714773b260",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -197,7 +239,195 @@
 						"api",
 						"v1",
 						"books",
-						"5e3b859ac513d124ea6006aa"
+						"5e4a2cb278e48f714773b260"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ratings by BookId",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3&bookId=5dc4c9734e9b1214ed7a9e3a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ratings"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						},
+						{
+							"key": "bookId",
+							"value": "5dc4c9734e9b1214ed7a9e3a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Rating",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"bookId\":\"5dc4c9734e9b1214ed7a9e3a\",\n\t\"stars\":\"3\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/ratings",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ratings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Rating",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookId\": \"5dc4c9734e9b1214ed7a9e4a\",\n    \"stars\": 5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/ratings/5e4a2eb77cfcdd3635c90f2e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ratings",
+						"5e4a2eb77cfcdd3635c90f2e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Book",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"author\":\"J. K. Rowling\",\n\t\"title\":\"Harry Potter\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/books/5e4a2f327cfcdd3635c90f2f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"books",
+						"5e4a2f327cfcdd3635c90f2f"
 					]
 				}
 			},

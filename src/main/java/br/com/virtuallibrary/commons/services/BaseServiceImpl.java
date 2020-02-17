@@ -16,6 +16,9 @@ import javax.validation.ValidationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -64,6 +67,12 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 	@Override
 	public List<E> findAll() {
 		return repository.findAll();
+	}
+	
+	@Override
+	public Page<E> findPaginated(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return repository.findAll(pageable);
 	}
 
 	@Override
@@ -161,11 +170,6 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 	private void checkAuditedEntity(E entity) {
 		if (entity instanceof BaseAudit) {
 			BaseAudit auditedEntity = (BaseAudit) entity;
-
-			auditedEntity.setCreator(null);
-			auditedEntity.setCreatedAt(null);
-			auditedEntity.setUpdater(null);
-			auditedEntity.setUpdatedAt(null);
 
 			Date date = new Date();
 			String login = ANONYMOUS;

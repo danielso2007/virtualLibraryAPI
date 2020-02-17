@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Document
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(of = { "id" })
+@EqualsAndHashCode(callSuper = false, of = { "id" })
 @SuperBuilder
 public abstract class BaseEntity implements Serializable {
 

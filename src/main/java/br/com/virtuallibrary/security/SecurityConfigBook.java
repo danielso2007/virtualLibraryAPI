@@ -1,6 +1,7 @@
 package br.com.virtuallibrary.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -22,21 +23,22 @@ import br.com.virtuallibrary.enums.Roles;
 @EnableWebSecurity
 @Configuration
 @Order(value = 2)
-public class SecurityConfigSwagger extends WebSecurityConfigurerAdapter {
+public class SecurityConfigBook extends WebSecurityConfigurerAdapter {
 
-	private static final String PATH = Constants.ROOT_URL + Constants.V1 + "books";
+	private static final String PATH = Constants.BOOKS;
+	
+	@Value("${spring.security.user.name}")
+	private String user;
+	@Value("${spring.security.user.password}")
+	private String password;
 
 	@Autowired
 	public void configureGlobal1(AuthenticationManagerBuilder auth) throws Exception {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		auth
         .inMemoryAuthentication()
-        .withUser("user")
-        .password(encoder.encode("password"))
-        .roles(Roles.USER.toString())
-        .and()
-        .withUser("admin")
-        .password(encoder.encode("admin"))
+        .withUser(user)
+        .password(encoder.encode(password))
         .roles(Roles.USER.toString(), Roles.ADMIN.toString());
 	}
 

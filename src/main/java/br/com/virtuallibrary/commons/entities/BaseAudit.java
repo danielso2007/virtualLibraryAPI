@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -19,13 +19,13 @@ public abstract class BaseAudit extends BaseEntity {
 
 	private static final long serialVersionUID = -6536341488318207281L;
 
-	@ApiModelProperty(notes = "A data de criação do registro. Não será permitido criar ou atualizar", example = "2019-11-08T12:00:00.212Z")
+	@Schema(description = "A data de criação do registro.", example = "2020-02-16 21:22:27")
 	private Date createdAt;
-	@ApiModelProperty(notes = "O login do criado do registro. Não será permitido criar ou atualizar", example = "system")
+	@Schema(description = "O login de quem criou o registro.", example = "admin")
 	private String creator;
-	@ApiModelProperty(notes = "A data de atualização do registro. Não será permitido criar ou atualizar", example = "2019-11-08T12:00:00.212Z")
+	@Schema(description = "A data de atualização do registro.", example = "2020-02-16 21:22:27")
 	private Date updatedAt;
-	@ApiModelProperty(notes = "O login do atualizador do registro. Não será permitido criar ou atualizar", example = "system")
+	@Schema(description = "O login de quem atualizou o registro.", example = "admin")
 	private String updater;
 
 }

@@ -66,13 +66,29 @@ Para "rodar" a imagem, execute:
 docker run -p 8080:8080 --name swapi  virtualLibraryAPI:<project.version>
 ```
 
+### Documentação da API - swagger (OpenAPI 3):
+
+A aplicação usa o swagger para a exibição da documentação da API. Para verificar, acesse os links [swagger-ui](http://localhost:8080/swagger-ui.html) e [api-docs](http://localhost:8080/api-docs). Documentação [swagger.io](https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/) e [springdoc.org](https://springdoc.org/).
+
+Mais exemplos: [documenting-spring-boot-rest-api-springdoc-openapi-3](https://www.dariawan.com/tutorials/spring/documenting-spring-boot-rest-api-springdoc-openapi-3/)
+
+Ou adicione o caminho abaixo:
+
+```
+http://localhost:8080/swagger-ui.html
+
+http://localhost:8080/api-docs
+```
+
 ### Teste o endereço docker (login: admin / password: admin):
 
 ```
-http://localhost:8080/swagger-ui.html#/
+http://localhost:8080/api/v1/books
+
+http://localhost:8080/api/v1/ratings
 ```
 
-Inicialmente só é criada a imagem da api. Posteriormente mostrarei como executar o `docker-compose` criado no build, para a execução completa da api com o banco de dados MongoDb.
+Inicialmente só é criada a imagem da API. Posteriormente mostrarei como executar o `docker-compose` criado no build, para a execução completa da api com o banco de dados MongoDb.
 
 ## Running with docker-compose
 

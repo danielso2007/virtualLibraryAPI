@@ -14,6 +14,13 @@ server:
          dir: logs
          enabled: false
          pattern: '%t %a "%r" %s (%D ms)'
+springdoc:
+   swagger-ui:
+      path: /swagger-ui.html
+      enabled: ${SWAGGER_UI_ENABLED:@swagger-ui-enabled@}
+   api-docs:
+      path: /api-docs
+      enabled: ${API_DOCS_ENABLED:@api-docs-enabled@}
 spring:
    security:
       user:

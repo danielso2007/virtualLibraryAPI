@@ -6,6 +6,12 @@
     "release": "standard-version",
     "test": "mvn -q test -P test"
   },
+  "standard-version": {
+    "scripts": {
+      "postbump": "node set-pom-version.js",
+      "postcommit": "git add pom.xml && git commit --amend --no-edit"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/danielso2007/virtualLibraryAPI.git"

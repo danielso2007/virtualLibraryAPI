@@ -154,6 +154,37 @@ Para encerrar o projeto, execute (dentro da pasta `target`):
 Nada será necessário, o projeto é executado como `Fat jar`. Mas para produção e homologação, é possível usar as imagens geradas pelo comando: `mvn clean package -Pdocker`. Muito importante para o uso do CI.
 
 
+# Banco de dados
+
+O projeto usa o mongo para banco de dados. Recomendo que utilize o projeto [danielso2007/dockerMongoDB](https://github.com/danielso2007/dockerMongoDB) para executar o mongo em docker. Há dois arquivos `book.js` e `rating.js` que podem ser usados para importar dados no banco.
+
+Segue a configuração padrão do banco, mas cada profile do `POM` tem seu database.
+- host: localhost
+- port: 27017
+- database: virtuallibraryapi
+- username: root
+- password: 112358
+
+Execute o arquivo `./mongoimport.sh` e informe:
+
+- Importando arquivo para o MongoDB...
+- Infome o nome do banco de dados:
+- `virtuallibraryapi`
+- Infome collection:
+- `book`
+- Infome o nome do arquivo JSON:
+- `book.json`
+
+Depois para o `rating`:
+
+- Importando arquivo para o MongoDB...
+- Infome o nome do banco de dados:
+- `virtuallibraryapi`
+- Infome collection:
+- `rating`
+- Infome o nome do arquivo JSON:
+- `rating.json`
+
 ## Built With
 
 * [Java](https://www.oracle.com/br/java/)

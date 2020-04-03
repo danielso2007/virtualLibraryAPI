@@ -158,12 +158,12 @@
 		<dependency>
 			<groupId>org.jboss.xnio</groupId>
 			<artifactId>xnio-nio</artifactId>
-			<version>3.7.7.Final</version>
+			<version>3.8.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.threads</groupId>
 			<artifactId>jboss-threads</artifactId>
-			<version>3.0.0.Final</version>
+			<version>3.1.0.Final</version>
 		</dependency>
 	</dependencies>
 

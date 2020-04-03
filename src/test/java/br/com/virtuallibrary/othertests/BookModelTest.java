@@ -50,6 +50,7 @@ public class BookModelTest {
 		assertTrue(entity.equals(entity));
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void testEqualsObjectNoBookModel() {
 		assertTrue(!entity.equals(Integer.getInteger("12")));

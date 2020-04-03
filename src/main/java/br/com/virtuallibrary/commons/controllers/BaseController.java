@@ -22,14 +22,15 @@ import br.com.virtuallibrary.commons.Constants;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.BaseRepository;
 import br.com.virtuallibrary.commons.services.BaseService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Recurso básico com endpoints de CRUD.
- * @author daniel
+ * @author Daniel Oliveira
  *
  * @param <E> Representa a entidade.
  * @param <ID> Representa o tipo identificador da entidade.
@@ -57,11 +58,13 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
-	@ApiOperation(value = "Obter registro pelo identificador", notes = "Será retornado um registro da base de dados.")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Registro carregado com sucesso."),
-			@ApiResponse(code = 404, message = "Registro não encontrado."),
-			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<M> find(@PathVariable ID id) {
+	@Operation(summary = "Obter um registro pelo id.", description = "Retorna um registro.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Registro carregado com sucesso."),
+			@ApiResponse(responseCode = "404", description = "Registro não encontrado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
+	public ResponseEntity<M> find(
+			@Parameter(description="O id do registro a ser obtido. Não pode ser vazio.", required=true) @PathVariable ID id) {
 		return service.findById(id) 
 		.map(modelAssembler::toModel) 
 		.map(ResponseEntity::ok) 
@@ -70,11 +73,14 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
-	@ApiOperation(value = "Salvar um novo registro", notes = "Cria um novo registro na base de dados.")
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "Registro criado com sucesso"),
-			@ApiResponse(code = 404, message = "Não foi possível cadastrar o registro."),
-			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<M> create(@RequestBody @Valid E object) {
+	@Operation(summary = "Adiciona um novo registro.", description = "Será gravado no banco de dados um novo registro.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Registro criado com sucesso"),
+			@ApiResponse(responseCode = "404", description = "Não foi possível cadastrar o registro."),
+			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
+	public ResponseEntity<M> create(
+			@Parameter(description="Registro a ser adicionado. Não pode ser nulo ou vazio.", required=true)
+			@RequestBody @Valid E object) {
 		return service.save(object)
 				.map(modelAssembler::toModel) 
 				.map(entity -> ResponseEntity.status(HttpStatus.CREATED).body(entity)) 
@@ -83,11 +89,15 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 
 	@ResponseStatus(HttpStatus.OK)
 	@DeleteMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
-	@ApiOperation(value = "Deletar um registro")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Registro deletado com sucesso"),
-			@ApiResponse(code = 404, message = "Registro não encontrado."),
-			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<Object> delete(@PathVariable ID id) {
+	@Operation(summary = "Deleta um registro.", description = "Remove o registro da base de dados.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Registro deletado com sucesso"),
+			@ApiResponse(responseCode = "404", description = "Registro não encontrado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
+	public ResponseEntity<Object> delete(
+			@Parameter(description="Id do registro a ser deletado. Não pode ser vazio.",
+            required=true)
+			@PathVariable ID id) {
 		return service.findById(id).map(entity -> {
 			service.delete(id);
 			return ResponseEntity.ok().build();
@@ -96,11 +106,16 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
-	@ApiOperation(value = "Atualizar um registro", notes = "Atualiza um registro na base de dados.")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Registro atualizado com sucesso"),
-			@ApiResponse(code = 404, message = "Registro não encontrado."),
-			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<M> update(@RequestBody @Valid E object, @PathVariable ID id) {
+	@Operation(summary = "Atualizar um registro", description = "Atualiza um registro existente.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Registro atualizado com sucesso"),
+			@ApiResponse(responseCode = "404", description = "Registro não encontrado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
+	public ResponseEntity<M> update(
+			@Parameter(description="O registro a ser atualizado.", required=true)
+			@RequestBody @Valid E object,
+			@Parameter(description="Id do registro a ser atualizado. Não pode ser vazio.", required=true)
+			@PathVariable ID id) {
 		return service.update(object, id)
 				.map(modelAssembler::toModel) 
 				.map(ResponseEntity::ok) 
@@ -110,11 +125,16 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 
 	@ResponseStatus(HttpStatus.OK)
 	@PatchMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
-	@ApiOperation(value = "Atualizar campos específicos de um registro.", notes = "Atualiza um registro na base de dados.")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Registro atualizado com sucesso"),
-			@ApiResponse(code = 404, message = "Registro não encontrado."),
-			@ApiResponse(code = 500, message = "Erro interno do servidor") })
-	public ResponseEntity<M> update(@RequestBody Map<String, String> updates, @PathVariable ID id) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	@Operation(summary = "Atualizar campos do registro", description = "Atualiza os campo do registro passado por um Map.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Registro atualizado com sucesso"),
+			@ApiResponse(responseCode = "404", description = "Registro não encontrado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
+	public ResponseEntity<M> update(
+			@Parameter(description="Os campos a serem atualizado no registro.", required=true)
+			@RequestBody Map<String, String> updates,
+			@Parameter(description="Id do registro a ser atualizado. Não pode ser vazio.", required=true)
+			@PathVariable ID id) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		try {
 			return service.update(updates, id)
 			.map(modelAssembler::toModel) 

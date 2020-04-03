@@ -2,10 +2,12 @@ package br.com.virtuallibrary.commons.entities;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotEmpty;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,8 @@ public abstract class BaseEntity implements Serializable {
 	private static final long serialVersionUID = -4185303902863688416L;
 
 	@Id
-	@ApiModelProperty(notes = "O identificado do registro", example = "5dc4c9734e9b1214ed7a9e3a")
+	@NotEmpty(message = "Id não pode ser vazio.")
+	@Schema(description = "O identificador do registro.", example = "5e49dcc31010b00b3383f8b6")
 	private String id;
 
 }

@@ -7,6 +7,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Relation(collectionRelation = "ratings", itemRelation = "rating")
+@JsonRootName(value = "rationgModel")
 @JsonInclude(Include.NON_NULL)
 public class RatingModel extends RepresentationModel<RatingModel> {
 

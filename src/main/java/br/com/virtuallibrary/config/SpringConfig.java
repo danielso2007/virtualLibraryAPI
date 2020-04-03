@@ -1,9 +1,15 @@
 package br.com.virtuallibrary.config;
 
+import static org.springdoc.core.SpringDocUtils.getConfig;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+import org.springframework.http.MediaType;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -11,16 +17,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Configuration
-public class SpringConfig {
+public class SpringConfig implements WebMvcConfigurer {
+
+	static {
+		getConfig().replaceWithClass(org.springframework.data.domain.Pageable.class, Pageable.class)
+				.replaceWithClass(org.springframework.data.domain.PageRequest.class, Pageable.class);
+	}
 
 	@Bean
 	public LocalValidatorFactoryBean localValidatorFactoryBean() {
-	    return new LocalValidatorFactoryBean();
+		return new LocalValidatorFactoryBean();
 	}
 
 	@Bean
 	public ValidatingMongoEventListener validatingMongoEventListener(LocalValidatorFactoryBean lfb) {
-	    return new ValidatingMongoEventListener(lfb);
+		return new ValidatingMongoEventListener(lfb);
 	}
 
 	@Bean
@@ -33,4 +44,10 @@ public class SpringConfig {
 		return builder;
 	}
 
+	@Override
+	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+		configurer
+		.useRegisteredExtensionsOnly(Boolean.TRUE)
+		.defaultContentType(MediaType.APPLICATION_JSON);
+	}
 }

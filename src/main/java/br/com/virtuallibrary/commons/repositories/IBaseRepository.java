@@ -15,5 +15,5 @@ import br.com.virtuallibrary.commons.entities.BaseEntity;
  * @param <ID> O tipo da identificação das entidades.
  */
 @NoRepositoryBean
-public interface BaseRepository<E extends BaseEntity, ID extends Serializable> extends MongoRepository<E, ID>, QueryByExampleExecutor<E> {
+public interface IBaseRepository<E extends BaseEntity, ID extends Serializable> extends MongoRepository<E, ID>, QueryByExampleExecutor<E> {
 }

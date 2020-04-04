@@ -25,7 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.virtuallibrary.commons.services.BaseServiceImpl;
+import br.com.virtuallibrary.commons.services.impl.BaseServiceImpl;
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.entity.Book.BookBuilder;
 import br.com.virtuallibrary.repositories.BookRepository;

@@ -1,4 +1,4 @@
-package br.com.virtuallibrary.commons.controllers;
+package br.com.virtuallibrary.commons.controllers.impl;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -18,27 +18,25 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import br.com.virtuallibrary.commons.Constants;
+import br.com.virtuallibrary.commons.IConstants;
+import br.com.virtuallibrary.commons.controllers.IBaseController;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
-import br.com.virtuallibrary.commons.repositories.BaseRepository;
-import br.com.virtuallibrary.commons.services.BaseService;
+import br.com.virtuallibrary.commons.repositories.IBaseRepository;
+import br.com.virtuallibrary.commons.services.IBaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Recurso básico com endpoints de CRUD.
- * @author Daniel Oliveira
- *
- * @param <E> Representa a entidade.
- * @param <ID> Representa o tipo identificador da entidade.
- * @param <R> Representa o repositório do entidade.
- * @param <S> Representa o serviço da entidade.
- */
 @Slf4j
-public class BaseController<E extends BaseEntity, ID extends Serializable, R extends BaseRepository<E, ID>, S extends BaseService<E, ID, R>, M extends RepresentationModel<M>> {
+public class BaseController<
+	    E extends BaseEntity,
+	    ID extends Serializable,
+	    R extends IBaseRepository<E, ID>,
+	    S extends IBaseService<E, ID, R>,
+	    M extends RepresentationModel<M>>
+    implements IBaseController<E, ID, R, S, M> {
 
 	private final S service;
 	private final RepresentationModelAssemblerSupport<E, M> modelAssembler;
@@ -48,16 +46,19 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 		this.modelAssembler = modelAssembler;
 	}
 
+	@Override
 	public final S getService() {
 		return service;
 	}
 	
+	@Override
 	public RepresentationModelAssemblerSupport<E, M> getModelAssembler() {
 		return this.modelAssembler;
 	}
 
+	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
+	@GetMapping(value = "/{id}", produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
 	@Operation(summary = "Obter um registro pelo id.", description = "Retorna um registro.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Registro carregado com sucesso."),
@@ -71,8 +72,9 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 		.orElse(ResponseEntity.notFound().build());
 	}
 
+	@Override
 	@ResponseStatus(HttpStatus.CREATED)
-	@PostMapping(produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
+	@PostMapping(produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
 	@Operation(summary = "Adiciona um novo registro.", description = "Será gravado no banco de dados um novo registro.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Registro criado com sucesso"),
@@ -87,8 +89,9 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 				.orElse(ResponseEntity.notFound().build());
 	}
 
+	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@DeleteMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
+	@DeleteMapping(value = "/{id}", produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
 	@Operation(summary = "Deleta um registro.", description = "Remove o registro da base de dados.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Registro deletado com sucesso"),
@@ -104,8 +107,9 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
+	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@PutMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
+	@PutMapping(value = "/{id}", produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
 	@Operation(summary = "Atualizar um registro", description = "Atualiza um registro existente.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Registro atualizado com sucesso"),
@@ -123,8 +127,9 @@ public class BaseController<E extends BaseEntity, ID extends Serializable, R ext
 
 	}
 
+	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@PatchMapping(value = "/{id}", produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
+	@PatchMapping(value = "/{id}", produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
 	@Operation(summary = "Atualizar campos do registro", description = "Atualiza os campo do registro passado por um Map.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Registro atualizado com sucesso"),

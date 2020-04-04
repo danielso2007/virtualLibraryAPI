@@ -1,4 +1,4 @@
-package br.com.virtuallibrary.commons.services;
+package br.com.virtuallibrary.commons.services.impl;
 
 import java.beans.Transient;
 import java.io.Serializable;
@@ -24,16 +24,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.virtuallibrary.commons.Constants;
+import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.commons.entities.BaseAudit;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
-import br.com.virtuallibrary.commons.repositories.BaseRepository;
+import br.com.virtuallibrary.commons.repositories.IBaseRepository;
+import br.com.virtuallibrary.commons.services.IBaseService;
 import br.com.virtuallibrary.commons.utils.GenericsUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R extends BaseRepository<E, ID>>
-		implements BaseService<E, ID, R> {
+public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
+		implements IBaseService<E, ID, R> {
 
 	public static final String O_CAMPO_S_NAO_EXISTE_FORMAT = "O campo %s não existe.";
 	public static final String A_ENTIDADE_NAO_PODE_SER_NULA = "A entidade não pode ser nula.";
@@ -45,7 +46,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 	public UserDetails getUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null || ANONYMOUS.equals(auth.getPrincipal())) {
-			return new User(ANONYMOUS, Constants.BLANK, false, false, false, false, new ArrayList<>());
+			return new User(ANONYMOUS, IConstants.BLANK, false, false, false, false, new ArrayList<>());
 		} else {
 			return (UserDetails) auth.getPrincipal();
 		}
@@ -118,6 +119,8 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 			declaredField.setAccessible(true);
 			// TODO: Refatorar.
 			if (declaredField.getType().equals(int.class)) {
+				declaredField.set(entity, Integer.valueOf(updates.get(fieldUpdate)));
+			} else if (declaredField.getType().equals(Integer.class)) {
 				declaredField.set(entity, Integer.valueOf(updates.get(fieldUpdate)));
 			} else {
 				declaredField.set(entity, updates.get(fieldUpdate));

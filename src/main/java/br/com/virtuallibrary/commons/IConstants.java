@@ -1,6 +1,8 @@
 package br.com.virtuallibrary.commons;
 
-public interface Constants {
+public interface IConstants {
+	String PACKAGE = "br.com.virtuallibrary";
+	
 	String DATE_FORMAT_FULL = "dd/MM/yyyy HH:mm:ss";
 	String DATE_FORMAT_DATE = "dd/MM/yyyy";
 	String DATE_FORMAT_SHORT = "dd/MM/yy";
@@ -28,6 +30,6 @@ public interface Constants {
 	String V1 = "v1/";
 	String ROOT_URL = "/api/";
 	
-	String BOOKS = Constants.ROOT_URL + Constants.V1 + "books";
-	String RATINGS= Constants.ROOT_URL + Constants.V1 + "ratings";
+	String BOOKS = IConstants.ROOT_URL + IConstants.V1 + "books";
+	String RATINGS= IConstants.ROOT_URL + IConstants.V1 + "ratings";
 }

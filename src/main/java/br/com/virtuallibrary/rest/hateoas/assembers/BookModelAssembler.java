@@ -7,7 +7,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import br.com.virtuallibrary.entity.Book;
-import br.com.virtuallibrary.rest.controllers.BookController;
+import br.com.virtuallibrary.rest.controllers.impl.BookController;
 import br.com.virtuallibrary.rest.hateoas.model.BookModel;
 
 @Component

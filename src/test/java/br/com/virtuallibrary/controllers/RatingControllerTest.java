@@ -29,7 +29,7 @@ import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.virtuallibrary.commons.Constants;
+import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.entity.Rating;
 import br.com.virtuallibrary.repositories.RatingRepository;
 import br.com.virtuallibrary.services.RatingService;
@@ -125,7 +125,7 @@ public class RatingControllerTest extends TestBaseController {
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		ENTITY_01.setStars(-1);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 	@Test
@@ -134,7 +134,7 @@ public class RatingControllerTest extends TestBaseController {
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		ENTITY_01.setBookId(null);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 	@Test
@@ -161,7 +161,7 @@ public class RatingControllerTest extends TestBaseController {
 		ENTITY_01.setBookId(null);
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 	@Test
@@ -171,7 +171,7 @@ public class RatingControllerTest extends TestBaseController {
 		ENTITY_01.setStars(-1);
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 	@Test
@@ -193,7 +193,7 @@ public class RatingControllerTest extends TestBaseController {
 		fields.put("asdas", "newEqwe");
 		fields.put("asdasd", "newTWER");
 		String json = patchHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isNotFound()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 }

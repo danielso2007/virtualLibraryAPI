@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import br.com.virtuallibrary.commons.Constants;
+import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.enums.Roles;
 
 /**
@@ -25,7 +25,7 @@ import br.com.virtuallibrary.enums.Roles;
 @Order(value = 2)
 public class SecurityConfigBook extends WebSecurityConfigurerAdapter {
 
-	private static final String PATH = Constants.BOOKS;
+	private static final String PATH = IConstants.BOOKS;
 	
 	@Value("${spring.security.user.name}")
 	private String user;

@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import br.com.virtuallibrary.commons.Constants;
+import br.com.virtuallibrary.commons.IConstants;
 
 public abstract class TestBaseController {
 
@@ -59,15 +59,15 @@ public abstract class TestBaseController {
 		MockHttpServletRequestBuilder requestBuilder = null;
 
 		if (HttpMethod.POST.equals(httpMethod)) {
-			requestBuilder = post(url).contentType(Constants.APPLICATION_JSON_UTF_8);
+			requestBuilder = post(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.GET.equals(httpMethod)) {
-			requestBuilder = get(url).contentType(Constants.APPLICATION_JSON_UTF_8);
+			requestBuilder = get(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.PUT.equals(httpMethod)) {
-			requestBuilder = put(url).contentType(Constants.APPLICATION_JSON_UTF_8);
+			requestBuilder = put(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.DELETE.equals(httpMethod)) {
-			requestBuilder = delete(url).contentType(Constants.APPLICATION_JSON_UTF_8);
+			requestBuilder = delete(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.PATCH.equals(httpMethod)) {
-			requestBuilder = patch(url).contentType(Constants.APPLICATION_JSON_UTF_8);
+			requestBuilder = patch(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
 		}
 
 		if (json != null) {

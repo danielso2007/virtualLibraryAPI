@@ -11,9 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.virtuallibrary.commons.entities.BaseEntity;
-import br.com.virtuallibrary.commons.repositories.BaseRepository;
+import br.com.virtuallibrary.commons.repositories.IBaseRepository;
 
-public interface BaseService<E extends BaseEntity, ID extends Serializable, R extends BaseRepository<E, ID>> {
+public interface IBaseService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>> {
 
 	List<E> findAll();
 

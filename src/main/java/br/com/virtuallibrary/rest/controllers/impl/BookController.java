@@ -1,4 +1,4 @@
-package br.com.virtuallibrary.rest.controllers;
+package br.com.virtuallibrary.rest.controllers.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import br.com.virtuallibrary.commons.Constants;
-import br.com.virtuallibrary.commons.controllers.BaseController;
+import br.com.virtuallibrary.commons.IConstants;
+import br.com.virtuallibrary.commons.controllers.impl.BaseController;
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.repositories.BookRepository;
+import br.com.virtuallibrary.rest.controllers.IBookController;
 import br.com.virtuallibrary.rest.hateoas.assembers.BookModelAssembler;
 import br.com.virtuallibrary.rest.hateoas.model.BookModel;
 import br.com.virtuallibrary.services.BookService;
@@ -32,9 +33,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestControllerAdvice
 @CrossOrigin(origins = "*")
 @ExposesResourceFor(Book.class)
-@RequestMapping(Constants.BOOKS)
+@RequestMapping(IConstants.BOOKS)
 @Tag(name = "Book", description = "The Book API")
-public class BookController extends BaseController<Book, String, BookRepository, BookService, BookModel> {
+public class BookController extends BaseController<Book, String, BookRepository, BookService, BookModel>
+			implements IBookController<Book, String, BookRepository, BookService, BookModel>{
 
 	@Autowired
 	private PagedResourcesAssembler<Book> pagedResourcesAssembler;
@@ -45,15 +47,15 @@ public class BookController extends BaseController<Book, String, BookRepository,
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(produces = { Constants.APPLICATION_JSON_UTF_8, Constants.APPLICATION_XML_UTF_8 })
+	@GetMapping(produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
 	@Operation(summary = "Obter lista de Book paginado", description = "Retorna a lista de Books paginado.", tags = { "Book" })
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Registros listados com sucesso"),
 			@ApiResponse(responseCode = "400", description = "Erro na obtenção dos dados"),
 			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
 	public ResponseEntity<CollectionModel<BookModel>> findAll(
-			@Parameter(description="Número da página, default é 0") @RequestParam(value = "page", required = false, defaultValue = Constants.defaultPage) int page,
-			@Parameter(description="Quantidade de registros por página, default é 5") @RequestParam(value = "size", required = false, defaultValue = Constants.defaultSize) int size) {
+			@Parameter(description="Número da página, default é 0") @RequestParam(value = "page", required = false, defaultValue = IConstants.defaultPage) int page,
+			@Parameter(description="Quantidade de registros por página, default é 5") @RequestParam(value = "size", required = false, defaultValue = IConstants.defaultSize) int size) {
 		
 		PagedModel<BookModel> collModel = pagedResourcesAssembler.toModel(getService().findPaginated(page, size), getModelAssembler());
 		

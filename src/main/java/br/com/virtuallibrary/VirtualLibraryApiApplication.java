@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(value = "br.com.virtuallibrary")
+import br.com.virtuallibrary.commons.IConstants;
+
+@ComponentScan(value = IConstants.PACKAGE)
 @EnableAutoConfiguration
 @SpringBootApplication
 public class VirtualLibraryApiApplication {

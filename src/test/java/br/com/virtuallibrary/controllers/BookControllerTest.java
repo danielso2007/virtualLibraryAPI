@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +30,7 @@ import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.virtuallibrary.commons.Constants;
+import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.repositories.BookRepository;
 import br.com.virtuallibrary.services.BookService;
@@ -59,7 +60,7 @@ public class BookControllerTest extends TestBaseController {
 
 	@Before
 	public void setUp() {
-		ENTITY_01 = Book.builder().title("Dom Quixote").createdAt(null).author("Miguel de Cervantes").build();
+		ENTITY_01 = Book.builder().title("Dom Quixote").createdAt(new Date()).author("Miguel de Cervantes").build();
 		ENTITY_02 = Book.builder().title("Guerra e Paz").author("Liev Tolstói").build();
 
 		List<Book> list = new ArrayList<>();
@@ -119,7 +120,7 @@ public class BookControllerTest extends TestBaseController {
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		ENTITY_01.setTitle(null);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 	@Test
@@ -128,7 +129,7 @@ public class BookControllerTest extends TestBaseController {
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		ENTITY_01.setAuthor(null);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 	@Test
@@ -155,7 +156,7 @@ public class BookControllerTest extends TestBaseController {
 		ENTITY_01.setTitle(null);
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 	@Test
@@ -165,7 +166,7 @@ public class BookControllerTest extends TestBaseController {
 		ENTITY_01.setAuthor(null);
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 	@Test
@@ -187,7 +188,7 @@ public class BookControllerTest extends TestBaseController {
 		fields.put("asdas", "newTitle");
 		fields.put("asdasd", "newAuthor");
 		String json = patchHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isNotFound()).getContentAsString();
-		assertEquals(Constants.BLANK, json);
+		assertEquals(IConstants.BLANK, json);
 	}
 	
 }

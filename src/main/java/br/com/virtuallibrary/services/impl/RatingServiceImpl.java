@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.com.virtuallibrary.commons.services.BaseServiceImpl;
+import br.com.virtuallibrary.commons.services.impl.BaseServiceImpl;
 import br.com.virtuallibrary.entity.Rating;
 import br.com.virtuallibrary.repositories.RatingRepository;
 import br.com.virtuallibrary.services.RatingService;

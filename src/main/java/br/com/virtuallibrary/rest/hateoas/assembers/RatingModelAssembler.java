@@ -7,8 +7,8 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import br.com.virtuallibrary.entity.Rating;
-import br.com.virtuallibrary.rest.controllers.BookController;
-import br.com.virtuallibrary.rest.controllers.RatingController;
+import br.com.virtuallibrary.rest.controllers.impl.BookController;
+import br.com.virtuallibrary.rest.controllers.impl.RatingController;
 import br.com.virtuallibrary.rest.hateoas.model.RatingModel;
 
 @Component

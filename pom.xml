@@ -218,6 +218,9 @@
 					<parallel>classes</parallel>
 					<perCoreThreadCount>true</perCoreThreadCount>
 					<useUnlimitedThreads>false</useUnlimitedThreads>
+					<includes>
+                        <include>${test.suites}</include>
+                    </includes>
 				</configuration>
 			</plugin>
 			<plugin>

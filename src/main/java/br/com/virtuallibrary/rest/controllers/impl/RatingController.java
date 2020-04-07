@@ -47,22 +47,31 @@ public class RatingController extends BaseController<Rating, String, RatingRepos
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
-	@Operation(summary = "Obter lista de Rating paginado", description = "Retorna a lista de Rating paginado. Quando passado %bookId%, retorna todos os Ratings associado ao livro.", tags = { "Rating" })
+	@Operation(summary = "Obter lista de Rating paginado", description = 
+	    "Retorna a lista de Rating paginado. Quando passado <b>bookId</b>, retorna todos os Ratings associado ao livro.<br/>"
+	    + "O filtro padrão é o igual, mas você pode usar:<br/>"
+	    + "Maior que \"gt:2\"<br/>"
+	    + "Menor que \"lt:2\"<br/>"
+	    + "Maior ou igual \"gte:2\"<br/>"
+	    + "Menor ou igual \"lte:2\"<br/>"
+	    + "Também é possível combinar dois filtros: gt:1:lt:5",
+	    tags = { "Rating" })
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "Registros listados com sucesso"),
 			@ApiResponse(responseCode = "400", description = "Erro na obtenção dos dados"),
 			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
 	public ResponseEntity<PagedModel<RatingModel>> findAll(
-			@Parameter(description="O código do livro, deafult é \"\"") @RequestParam(value = "bookId", required = false, defaultValue = IConstants.BLANK) String bookId,
-			@Parameter(description="Número da página, default é 0") @RequestParam(value = "page", required = false, defaultValue = IConstants.defaultPage) int page, 
-			@Parameter(description="Quantidade de registros por página, default é 5") @RequestParam(value = "size", required = false, defaultValue = IConstants.defaultSize) int size) {
+			@Parameter(description="Número da página, default é 0.") @RequestParam(value = "page", required = false, defaultValue = IConstants.defaultPage) int page, 
+			@Parameter(description="Quantidade de registros por página, default é 5.") @RequestParam(value = "size", required = false, defaultValue = IConstants.defaultSize) int size,
+			@Parameter(description="O código do livro.") @RequestParam(value = "bookId", required = false) String bookId,
+			@Parameter(description="Por classificação.") @RequestParam(value = "stars", required = false) String stars) {
 
 		PagedModel<RatingModel> collModel = null;
 		
-		if (bookId.isBlank()) {
+		if (bookId == null && stars == null) {
 			collModel = pagedResourcesAssembler.toModel(getService().findPaginated(page, size), getModelAssembler());
 		} else {
-			collModel = pagedResourcesAssembler.toModel(getService().findPaginated(bookId, page, size), getModelAssembler());
+			collModel = pagedResourcesAssembler.toModel(getService().findPaginated(bookId, stars, page, size), getModelAssembler());
 		}
 		
 		return ResponseEntity.ok().body(collModel);

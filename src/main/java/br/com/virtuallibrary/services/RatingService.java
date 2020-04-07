@@ -11,5 +11,5 @@ import br.com.virtuallibrary.repositories.RatingRepository;
 public interface RatingService extends IBaseService<Rating, String, RatingRepository> {
 
 	List<Rating> findByBookId(String bookId);
-	Page<Rating> findPaginated(String bookI, int page, int size);
+	Page<Rating> findPaginated(String bookI, String stars, int page, int size);
 }

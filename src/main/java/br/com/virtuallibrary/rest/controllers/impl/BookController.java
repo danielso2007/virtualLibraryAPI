@@ -48,16 +48,33 @@ public class BookController extends BaseController<Book, String, BookRepository,
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
-	@Operation(summary = "Obter lista de Book paginado", description = "Retorna a lista de Books paginado.", tags = { "Book" })
+	@Operation(summary = "Obter lista de Book paginado",
+	description = "Retorna a lista de Books paginado.<br/>"
+			+ "Os filtros são por default contains e ignoreCase.<br/>"
+			+ "Segue os filtros:<br/>"
+			+ "Por título;<br/>"
+			+ "Por autor;<br/>"
+			+ "Os filtros podem ser combinados.",
+	tags = { "Book" })
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Registros listados com sucesso"),
 			@ApiResponse(responseCode = "400", description = "Erro na obtenção dos dados"),
-			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
+			@ApiResponse(responseCode = "500", description = "Erro interno do servidor")})
 	public ResponseEntity<CollectionModel<BookModel>> findAll(
-			@Parameter(description="Número da página, default é 0") @RequestParam(value = "page", required = false, defaultValue = IConstants.defaultPage) int page,
-			@Parameter(description="Quantidade de registros por página, default é 5") @RequestParam(value = "size", required = false, defaultValue = IConstants.defaultSize) int size) {
+			@Parameter(description="Número da página.") @RequestParam(value = "page", required = false, defaultValue = IConstants.defaultPage) int page,
+			@Parameter(description="Quantidade de registros por página.") @RequestParam(value = "size", required = false, defaultValue = IConstants.defaultSize) int size,
+			@Parameter(description="Filtro pelo título do livro.") @RequestParam(value = "title", required = false) String title,
+			@Parameter(description="Filtro pelo autor do livro.") @RequestParam(value = "author", required = false) String author) {
 		
-		PagedModel<BookModel> collModel = pagedResourcesAssembler.toModel(getService().findPaginated(page, size), getModelAssembler());
+		PagedModel<BookModel> collModel = null;
+		
+		if (title == null && author == null) {
+			collModel = pagedResourcesAssembler.toModel(getService().findPaginated(page, size), getModelAssembler());
+		} else{
+			
+			collModel = pagedResourcesAssembler.toModel(getService().findPaginated(title, author, page, size), getModelAssembler());
+		}
+		
 		
 		return ResponseEntity.ok().body(collModel);
 	}

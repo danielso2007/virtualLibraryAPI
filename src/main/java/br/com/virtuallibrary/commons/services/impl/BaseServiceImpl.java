@@ -16,9 +16,14 @@ import javax.validation.ValidationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -41,6 +46,9 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 	private final String ANONYMOUS = "Anonymous";
 	private final R repository;
 	private final Class<E> entityClass;
+	
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	@Override
 	public UserDetails getUser() {
@@ -63,6 +71,20 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 
 	protected Class<E> getEntityClass() {
 		return entityClass;
+	}
+	
+	@Override
+	public MongoTemplate getTemplate() {
+		return mongoTemplate;
+	}
+	
+	@Override
+	public Page<E> findAll(Query query, final int page, final int size) {
+		if (query == null) {
+			query = new Query();
+		}
+        List<E> results = getTemplate().find(query, getEntityClass());
+		return getPage(results, PageRequest.of(page, size), query);
 	}
 
 	@Override
@@ -189,5 +211,25 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 			}
 		}
 	}
-
+	
+	public Page<E> getPage(List<E> results, Pageable pageable, Query query) {
+		query.with(pageable);
+		return PageableExecutionUtils.getPage(results, pageable, () -> getTemplate().count(query, entityClass));
+	}
+	
+	@Override
+	public Criteria getCriteriaByFilter(final Query query, final String filter, final Object value) {
+		if (filter.equalsIgnoreCase("gt")) {
+			return new Criteria("stars").gt(value);	
+		} else if (filter.equalsIgnoreCase("lt")) {
+			return new Criteria("stars").lt(value);
+		} else if (filter.equalsIgnoreCase("gte")) {
+			return new Criteria("stars").gte(value);
+		} else if (filter.equalsIgnoreCase("lte")) {
+			return new Criteria("stars").lte(value);
+		} else {
+			throw new IllegalArgumentException(String.format("Não foi possível usar o filtro %s.", filter));
+		}
+	}
+	
 }

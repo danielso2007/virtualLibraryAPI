@@ -6,7 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
+
+import com.mongodb.BasicDBList;
 
 import br.com.virtuallibrary.commons.services.impl.BaseServiceImpl;
 import br.com.virtuallibrary.entity.Rating;
@@ -27,12 +32,30 @@ public class RatingServiceImpl extends BaseServiceImpl<Rating, String, RatingRep
 	}
 	
 	@Override
-	public Page<Rating> findPaginated(String bookId, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
+	public Page<Rating> findPaginated(String bookId, String stars, int page, int size) {
+		Query query = new Query();
+		
 		if (bookId != null) {
-			return getRepository().findByBookId(bookId, pageable);
+			query.addCriteria(new Criteria("bookId").is(bookId));
 		}
-		return getRepository().findAll(pageable);
+		
+		//FIXME: Melhorar o código abaixo.
+		if (stars != null) {
+			String[] filters = stars.split(":");
+			
+			if (filters.length == 2) {
+				query.addCriteria(getCriteriaByFilter(query, filters[0], Integer.valueOf(filters[1])));
+			} else if (filters.length == 4) {
+				BasicDBList bsonList = new BasicDBList();
+				bsonList.add(getCriteriaByFilter(query, filters[0], Integer.valueOf(filters[1])).getCriteriaObject());
+				bsonList.add(getCriteriaByFilter(query, filters[2], Integer.valueOf(filters[3])).getCriteriaObject());
+				query.addCriteria(new Criteria("$and").is(bsonList));
+			} else {
+				query.addCriteria(new Criteria("stars").is(Integer.parseInt(stars)));
+			}
+		}
+
+		return findAll(query, page, size);
 	}
 
 }

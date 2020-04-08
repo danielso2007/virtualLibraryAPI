@@ -161,7 +161,7 @@ public class BookServicesTest {
 	public void testUpdateEntityNull() {
 		Book entity = null;
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> service.update(entity, ID));
-		assertTrue(exception.getMessage().equals(BaseServiceImpl.A_ENTIDADE_NAO_PODE_SER_NULA));
+		assertTrue(exception.getMessage().equals(BaseServiceImpl.THE_ENTITY_CANNOT_BE_NULL));
 	}
 	
 	@Test

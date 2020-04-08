@@ -18,6 +18,7 @@ public interface IConstants {
 	String BLANK = "";
 	String SPACE = " ";
 	String SEMICOLON = ";";
+	String COLON = ":";
 	String DOT = ".";
 	String COMMA = ",";
 	String HIFEN = "-";
@@ -32,4 +33,16 @@ public interface IConstants {
 	
 	String BOOKS = IConstants.ROOT_URL + IConstants.V1 + "books";
 	String RATINGS= IConstants.ROOT_URL + IConstants.V1 + "ratings";
+
+	// MONGODB
+	String $AND = "$and";
+	String $REGEX_CONTAINS = ".*%s.*";
+	
+	String $CONTAINS = "contains";
+	String $GREATER_THAN = "gt";
+	String $GREATER_THAN_OR_EQUAL = "gte";
+	String $LESS_THAN = "lt";
+	String $LESS_THAN_OR_EQUAL = "lte";
+	String $EQ = "eq";
 }
+

@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.validation.ValidationException;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,39 +21,38 @@ public interface IBaseService<E extends BaseEntity, ID extends Serializable, R e
 
 	List<E> findAll();
 
-	/**
-	 * and – operador lógico AND
-	 * or – operador lógico OR
-	 * not – operador lógico NOT
-	 * gt = maior que
-	 * lt = menor que
-	 * gte = maior ou igual
-	 * lte = menor ou igual
-	 * ne = diferente de
-	 * in = todos os documentos cujo atributo possui um dos valores especificados (no SQL operador IN)
-	 * nin = todos os documentos cujo atributo não possui um dos valores especificados (no SQL operador NOT IN)
-	 * @param page A página a ser pesquisada.
-	 * @param size A quantidade de registro por página.
-	 * @return O resultado paginado.
-	 */
-	Page<E> findPaginated(int page, int size);
+	Page<E> findPaginated(final int page, final int size);
 	
-	Optional<E> findById(ID id);
+	Page<E> findPaginated(int page, int size, Map<String, String> filters);
+	
+	Page<E> findAll(Query query, int page, int size);
+	
+	Page<E> findAll(Query query, int page, int size, List<Criteria> criterias);
+	
+	Page<E> getPage(List<E> results, Pageable pageable, Query query, List<Criteria> criterias);
+	
+	Optional<E> findById(final ID id);
 
 	Optional<E> save(E object);
 
-	void delete(ID id);
+	void delete(final ID id);
 
-	Optional<E> update(Map<String, String> updates, ID id) throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException;
+	Optional<E> update(Map<String, String> updates, final ID id) throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException;
 
-	Optional<E> update(E object, ID id);
+	Optional<E> update(E object, final ID id);
 
 	UserDetails getUser();
 
 	MongoTemplate getTemplate();
 
-	Criteria getCriteriaByFilter(Query query, String filter, Object value);
+	Map<String, String> getFilterValues(Map<String, String> filters);
 
-	Page<E> findAll(Query query, int page, int size);
+	Criteria getCriteriaByFilter(Criteria criteria, String filter, Object value);
+
+	Criteria getCriteriaByFilter(Criteria criteria, String filter, Object value, String regex);
+
+	Criteria createCriteriaByFilter(Query query, String field, String value, String regex);
+
+	Criteria createCriteriaByFilter(Query query, String field, String value);
 
 }

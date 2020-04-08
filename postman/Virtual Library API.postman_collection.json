@@ -1,12 +1,12 @@
 {
 	"info": {
-		"_postman_id": "28ebeeae-1d90-471f-b6fa-1ca96e4f392b",
+		"_postman_id": "862ed615-7350-48ef-9de9-ef763c336b53",
 		"name": "Virtual Library API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Books",
+			"name": "AllBooks",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -25,6 +25,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books?page=0&size=3",
 					"protocol": "http",
@@ -52,7 +56,65 @@
 			"response": []
 		},
 		{
-			"name": "Ratings",
+			"name": "BooksFilter",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/books?page=0&size=3&author=contains:Machado&title=contains:Dom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"books"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						},
+						{
+							"key": "author",
+							"value": "contains:Machado"
+						},
+						{
+							"key": "title",
+							"value": "contains:Dom"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AllRatings",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -71,6 +133,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3",
 					"protocol": "http",
@@ -91,6 +157,84 @@
 						{
 							"key": "size",
 							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RatingsFilter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=5&stars=gte:2:lte:4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ratings"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						},
+						{
+							"key": "stars",
+							"value": "gte:2:lte:4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RatingsFindBookId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3&bookId=5dc4c9734e9b1214ed7a9e3a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ratings"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						},
+						{
+							"key": "bookId",
+							"value": "5dc4c9734e9b1214ed7a9e3a"
 						}
 					]
 				}
@@ -126,12 +270,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"author\":\"J. K. Rowling\",\n\t\"title\":\"Harry Potter\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\n\t\"author\":\"J. K. Rowling\",\n\t\"title\":\"Harry Potter\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books",
@@ -169,6 +308,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books/5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
@@ -191,6 +334,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings/5e3b92162f89a422faa31230",
 					"protocol": "http",
@@ -228,6 +375,10 @@
 				},
 				"method": "DELETE",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books/5e4a2cb278e48f714773b260",
 					"protocol": "http",
@@ -265,6 +416,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3&bookId=5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
@@ -356,12 +511,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"bookId\": \"5dc4c9734e9b1214ed7a9e4a\",\n    \"stars\": 5\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\n    \"bookId\": \"5dc4c9734e9b1214ed7a9e4a\",\n    \"stars\": 5\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings/5e4a2eb77cfcdd3635c90f2e",
@@ -409,12 +559,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"author\":\"J. K. Rowling\",\n\t\"title\":\"Harry Potter\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\n\t\"author\":\"J. K. Rowling\",\n\t\"title\":\"Harry Potter\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books/5e4a2f327cfcdd3635c90f2f",
@@ -433,6 +578,5 @@
 			},
 			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

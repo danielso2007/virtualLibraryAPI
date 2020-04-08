@@ -12,7 +12,8 @@ import br.com.virtuallibrary.entity.Rating;
 @Repository
 public interface RatingRepository extends IBaseRepository<Rating, String> {
 	
-	public List<Rating> findByBookId(String bookId);
-	public Page<Rating> findByBookId(String bookId, Pageable pageable);
+	List<Rating> findByBookId(String bookId);
+	Page<Rating> findByBookId(String bookId, Pageable pageable);
+	List<Rating> findByStarsBetween(int starsGT, int starsLT);
 	
 }

@@ -160,7 +160,7 @@ public class RatingServiceTest {
 	public void testUpdateEntityNull() {
 		Rating entity = null;
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> service.update(entity, ID));
-		assertTrue(exception.getMessage().equals(BaseServiceImpl.A_ENTIDADE_NAO_PODE_SER_NULA));
+		assertTrue(exception.getMessage().equals(BaseServiceImpl.THE_ENTITY_CANNOT_BE_NULL));
 	}
 	
 	@Test
@@ -173,7 +173,7 @@ public class RatingServiceTest {
 		Map<String, String> updates = new HashMap<String, String>();
 		updates.put("Teste", null);
 		Exception exception = assertThrows(ValidationException.class, () -> service.update(updates, ID));
-		assertTrue(exception.getMessage().equals(String.format(BaseServiceImpl.O_CAMPO_S_NAO_EXISTE_FORMAT, "Teste")));
+		assertTrue(exception.getMessage().equals(String.format(BaseServiceImpl.THE_FIELD_DOES_NOT_EXIST_FORMAT, "Teste")));
 	}
 	
 	@Test

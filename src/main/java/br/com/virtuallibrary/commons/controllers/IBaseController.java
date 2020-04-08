@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,8 @@ public interface IBaseController<E extends BaseEntity, ID extends Serializable, 
 
 	S getService();
 
+	PagedResourcesAssembler<E> getPagedResourcesAssembler();
+	
 	RepresentationModelAssemblerSupport<E, M> getModelAssembler();
 
 	ResponseEntity<M> find(ID id);

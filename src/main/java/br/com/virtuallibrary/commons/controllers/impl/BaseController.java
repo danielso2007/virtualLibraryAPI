@@ -5,6 +5,9 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.com.virtuallibrary.commons.IConstants;
@@ -40,10 +44,12 @@ public class BaseController<
 
 	private final S service;
 	private final RepresentationModelAssemblerSupport<E, M> modelAssembler;
+	private final PagedResourcesAssembler<E> pagedResourcesAssembler;
 
-	public BaseController(S service, RepresentationModelAssemblerSupport<E, M> modelAssembler) {
+	public BaseController(S service, PagedResourcesAssembler<E> pagedResourcesAssembler, RepresentationModelAssemblerSupport<E, M> modelAssembler) {
 		this.service = service;
 		this.modelAssembler = modelAssembler;
+		this.pagedResourcesAssembler = pagedResourcesAssembler;
 	}
 
 	@Override
@@ -52,10 +58,42 @@ public class BaseController<
 	}
 	
 	@Override
+	public PagedResourcesAssembler<E> getPagedResourcesAssembler() {
+		return pagedResourcesAssembler;
+	}
+
+	@Override
 	public RepresentationModelAssemblerSupport<E, M> getModelAssembler() {
 		return this.modelAssembler;
 	}
 
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping(produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
+	@Operation(summary = "Retorna a lista de registros paginado.", description =
+		      "O filtro padrão é o igual ($eq), mas você pode utilizar:<br/>"
+		    + "Contém - \"<b>contains</b>:valor\"<br/>"
+		    + "Igual - \"<b>eq</b>:valor\"<br/>"
+		    + "Maior que - \"<b>gt</b>:numerico\"<br/>"
+		    + "Menor que - \"<b>lt</b>:numerico\"<br/>"
+		    + "Maior ou igual - \"<b>gte</b>:numerico\"<br/>"
+		    + "Menor ou igual - \"<b>lte</b>:numerico\"<br/>"
+		    + "Também é possível combinar dois filtros - <b>gt</b>:numerico:<b>lt</b>:numerico")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Registros listados com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro"),
+			@ApiResponse(responseCode = "500", description = "Erro interno do servidor")})
+	public ResponseEntity<CollectionModel<M>> findAll(
+			@Parameter(description="Número da página.") @RequestParam(value = "page", required = false, defaultValue = IConstants.defaultPage) int page,
+			@Parameter(description="Quantidade de registros por página.") @RequestParam(value = "size", required = false, defaultValue = IConstants.defaultSize) int size,
+			@Parameter(description="Filtros de pesquisa conforme campos da entidade.") @RequestParam(required = false) Map<String,String> filters) {
+		
+		PagedModel<M> collModel = null;
+		
+		collModel = getPagedResourcesAssembler().toModel(getService().findPaginated(page, size, filters), getModelAssembler());
+		
+		return ResponseEntity.ok().body(collModel);
+	}
+	
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = "/{id}", produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })

@@ -64,4 +64,11 @@ public interface IBaseService<E extends BaseEntity, ID extends Serializable, R e
 
 	Class<?> getFieldType(String field);
 
+	/**
+	 * Checks if the informed field exists in the current entity.
+	 * @param field The field to be verified.
+	 * @return <code>True</code> if the field exists in the entity. <code>False</code> if it does not exist.
+	 */
+	boolean fieldExistsInTheEntity(String field);
+
 }

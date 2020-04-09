@@ -281,26 +281,47 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		for(int x = 0; x < fields.length; x++) {
 			String[] field = fields[x].split(IConstants.COLON);
 			if (field.length == 2) {
-				Direction direction = null;
-				if (DIRECTION_DESC.equalsIgnoreCase(field[1])) {
-					direction = Direction.DESC;
-				} else {
-					direction = Direction.ASC;
+				if (fieldExistsInTheEntity(field[0])) {				
+					Direction direction = null;
+					if (DIRECTION_DESC.equalsIgnoreCase(field[1])) {
+						direction = Direction.DESC;
+					} else {
+						direction = Direction.ASC;
+					}
+					orders.add(new Order(direction, field[0]));
 				}
-				orders.add(new Order(direction, field[0]));
 			} else {
-				orders.add(new Order(Sort.DEFAULT_DIRECTION, fields[x]));
+				if (fieldExistsInTheEntity(fields[x])) {
+					orders.add(new Order(Sort.DEFAULT_DIRECTION, fields[x]));
+				}
 			}
 		}
 		return Sort.by(orders);
 	}
 	
+	private java.beans.PropertyDescriptor[] getPropertyDescriptor() {
+		return new BeanWrapperImpl(entityClass).getPropertyDescriptors();
+	}
+	
+	@Override
+	public boolean fieldExistsInTheEntity(String field) {
+		boolean exists = Boolean.FALSE;
+		for (java.beans.PropertyDescriptor pd : getPropertyDescriptor()) {
+			if (pd.getReadMethod().isAnnotationPresent(Transient.class)) {
+				continue;
+			}
+			if (pd.getName().equalsIgnoreCase(field)) {
+				exists = Boolean.TRUE;
+				break;
+			}
+		}
+		return exists;
+	}
+	
 	@Override
 	public Map<String, String> getFilterValues(Map<String, String> filters) {
 		Map<String, String> filterValues = new TreeMap<>();
-		final BeanWrapper src = new BeanWrapperImpl(entityClass);
-		java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-		for (java.beans.PropertyDescriptor pd : pds) {
+		for (java.beans.PropertyDescriptor pd : getPropertyDescriptor()) {
 			if (pd.getReadMethod().isAnnotationPresent(Transient.class)) {
 				continue;
 			}
@@ -314,10 +335,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 	@Override
 	public Class<?> getFieldType(String field) {
 		Class<?> $class = null;
-		final BeanWrapper src = new BeanWrapperImpl(entityClass);
-		java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-		for (java.beans.PropertyDescriptor pd : pds) {
+		for (java.beans.PropertyDescriptor pd : getPropertyDescriptor()) {
 			if (pd.getName().equalsIgnoreCase(field)) {
 				$class = pd.getPropertyType();
 			}

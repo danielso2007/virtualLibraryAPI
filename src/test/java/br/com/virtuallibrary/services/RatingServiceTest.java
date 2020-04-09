@@ -277,4 +277,15 @@ public class RatingServiceTest {
 		assertEquals("stars: ASC,bookId: ASC", sort.toString());
 	}
 	
+	@Test
+	public void testGetSortSomeFieldsAndDirections() {
+		filters = new TreeMap<>();
+		filters.put(FIELD_XPTO, FIELD_XPTO);
+		filters.put(FIELD_BOOK_ID, "teste");
+		filters.put(FIELD_STARS, "teste");
+		filters.put(ORDERBY, "stars:ASC,xpto,bookId:DESC");
+		Sort sort = service.getSort(filters);
+		assertEquals("stars: ASC,bookId: DESC", sort.toString());
+	}
+	
 }

@@ -21,6 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -46,9 +49,12 @@ import lombok.extern.slf4j.Slf4j;
 public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
 		implements IBaseService<E, ID, R> {
 
+	private static final String DIRECTION_DESC = "desc";
+	private static final String ORDERBY = "orderby";
 	public static final String THE_FIELD_DOES_NOT_EXIST_FORMAT = "The %s field does not exist.";
 	public static final String THE_ENTITY_CANNOT_BE_NULL = "The entity cannot be null.";
 	private final String ANONYMOUS = "Anonymous";
+	
 	private final R repository;
 	private final Class<E> entityClass;
 
@@ -87,17 +93,30 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 	public List<E> findAll() {
 		return getRepository().findAll();
 	}
+	
+	@Override
+	public List<E> findAll(Sort sort) {
+		return getRepository().findAll(sort);
+	}
 
 	@Override
 	public Page<E> findAll(Query query, final int page, final int size) {
-		return findAll(query, page, size, null);
+		return findAll(query, page, size, null, null);
 	}
 	
 	@Override
 	public Page<E> findAll(Query query, int page, int size, List<Criteria> criterias) {
+		return findAll(query, page, size, criterias, null);
+	}
+	
+	@Override
+	public Page<E> findAll(Query query, int page, int size, List<Criteria> criterias, Sort sort) {
 		Pageable pageable = PageRequest.of(page, size);
 		query = addCriterias(query, criterias);
 		query.with(pageable);
+		if (sort != null) {
+			query.with(sort);
+		}
 		List<E> results = getTemplate().find(query, getEntityClass());
 		return getPage(results, pageable, query, criterias);
 	}
@@ -133,7 +152,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 	@Override
 	public Page<E> findPaginated(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
-		return repository.findAll(pageable);
+		return getRepository().findAll(pageable);
 	}
 
 	@Override
@@ -177,14 +196,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 			}
 			boolean accessible = declaredField.canAccess(entity);
 			declaredField.setAccessible(true);
-			// FIXME: Improve code below with refactoring.
-			if (declaredField.getType().equals(int.class)) {
-				declaredField.set(entity, Integer.valueOf(updates.get(fieldUpdate)));
-			} else if (declaredField.getType().equals(Integer.class)) {
-				declaredField.set(entity, Integer.valueOf(updates.get(fieldUpdate)));
-			} else {
-				declaredField.set(entity, updates.get(fieldUpdate));
-			}
+			declaredField.set(entity, getValueByFieldType(declaredField.getName(), updates.get(fieldUpdate)));
 			declaredField.setAccessible(accessible);
 		}
 		checkAuditedEntity(entity);
@@ -251,12 +263,43 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 	}
 
 	@Override
+	public Sort getSort(Map<String, String> filters) {
+		String[] orderBy = new String[1];
+		filters.forEach((k,v) -> {
+			if (ORDERBY.equalsIgnoreCase(k)) {
+				orderBy[0] = v;
+			}
+		});
+		if (orderBy[0] == null || orderBy[0].isEmpty()) {
+			return null;
+		}
+		String[] fields = null;
+		fields = orderBy[0].split(IConstants.COMMA);
+		
+		List<Order> orders = new ArrayList<>();
+		
+		for(int x = 0; x < fields.length; x++) {
+			String[] field = fields[x].split(IConstants.COLON);
+			if (field.length == 2) {
+				Direction direction = null;
+				if (DIRECTION_DESC.equalsIgnoreCase(field[1])) {
+					direction = Direction.DESC;
+				} else {
+					direction = Direction.ASC;
+				}
+				orders.add(new Order(direction, field[0]));
+			} else {
+				orders.add(new Order(Sort.DEFAULT_DIRECTION, fields[x]));
+			}
+		}
+		return Sort.by(orders);
+	}
+	
+	@Override
 	public Map<String, String> getFilterValues(Map<String, String> filters) {
 		Map<String, String> filterValues = new TreeMap<>();
-
 		final BeanWrapper src = new BeanWrapperImpl(entityClass);
 		java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
 		for (java.beans.PropertyDescriptor pd : pds) {
 			if (pd.getReadMethod().isAnnotationPresent(Transient.class)) {
 				continue;
@@ -265,11 +308,11 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 				filterValues.put(pd.getName(), filters.get(pd.getName()));
 			}
 		}
-
 		return filterValues;
 	}
 
-	private Class<?> getFieldType(String field) {
+	@Override
+	public Class<?> getFieldType(String field) {
 		Class<?> $class = null;
 		final BeanWrapper src = new BeanWrapperImpl(entityClass);
 		java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
@@ -286,6 +329,8 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 		Class<?> $class = getFieldType(field);
 		if ($class.equals(Integer.class)) {
 			return Integer.valueOf(value);
+		} if ($class.equals(int.class)) {
+			return Integer.parseInt(value);
 		} else {
 			return value;
 		}

@@ -12,9 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import javax.validation.ValidationException;
 
+import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,8 +25,11 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.commons.services.impl.BaseServiceImpl;
 import br.com.virtuallibrary.entity.Rating;
 import br.com.virtuallibrary.entity.Rating.RatingBuilder;
@@ -34,12 +39,19 @@ import br.com.virtuallibrary.repositories.RatingRepository;
 @RunWith(SpringRunner.class)
 public class RatingServiceTest {
 
+	private static final String FIELD_STARS = "stars";
+	private static final String FIELD_BOOK_ID = "bookId";
+	private static final String ORDERBY = "orderby";
+	private static final String FIELD_XPTO = "xpto";
+	private static final String FILTER_FORMAT = "$%s";
 	private static final int STARS = 5;
 	private static final String ID_BOOK = "5dc4c9734e9b1214ed7a9e8a";
 	private static final String ID = "665t734e9b1214ed76ffrt";
 
 	private Rating ENTITY;
 	private Rating ENTITY_ID;
+	
+	private Map<String, String> filters;
 
 	@MockBean
 	private RatingRepository repository;
@@ -60,6 +72,12 @@ public class RatingServiceTest {
 		when(repository.findById(null)).thenReturn(Optional.empty());
 		when(repository.findAll()).thenReturn(list);
 		when(repository.findByBookId(ID)).thenReturn(list);
+		
+		filters = new TreeMap<>();
+		filters.put(FIELD_XPTO, FIELD_XPTO);
+		filters.put(FIELD_BOOK_ID, "teste");
+		filters.put(FIELD_STARS, "teste");
+		filters.put(ORDERBY, "stars:desc");
 	}
 
 	@Test
@@ -179,7 +197,7 @@ public class RatingServiceTest {
 	@Test
 	public void testUpdateEntityMapValues() throws SecurityException, IllegalArgumentException, IllegalAccessException {
 		Map<String, String> updates = new HashMap<String, String>();
-		updates.put("bookId", "lkkk866yytuwetu635");
+		updates.put(FIELD_BOOK_ID, "lkkk866yytuwetu635");
 		System.out.println(ENTITY_ID);
 		assertTrue(service.update(updates, ID).isPresent());
 	}
@@ -202,6 +220,61 @@ public class RatingServiceTest {
 	@Test
 	public void testUpdateIdNullMapValues() throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		assertTrue(service.update(new HashMap<String, String>(), null).isEmpty());
+	}
+	
+	@Test
+	public void testGetCriteriaByFilter$gt() {
+		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.$GREATER_THAN, new Object());
+		Document document = criteria.getCriteriaObject();
+		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.$GREATER_THAN)));
+	}
+	
+	@Test
+	public void testGetCriteriaByFilter$lte() {
+		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.$LESS_THAN_OR_EQUAL, new Object());
+		Document document = criteria.getCriteriaObject();
+		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.$LESS_THAN_OR_EQUAL)));
+	}
+	
+	@Test
+	public void testGetFilterValues() {
+		Map<String, String> filterValues = service.getFilterValues(filters);
+		assertTrue(!filterValues.containsKey(FIELD_XPTO));
+	}
+	
+	@Test
+	public void testGetFilterValuesSize() {
+		Map<String, String> filterValues = service.getFilterValues(filters);
+		assertTrue(filterValues.size() == 2);
+	}
+	
+	@Test
+	public void testGetFieldTypeStars() {
+		Object result = service.getFieldType(FIELD_STARS);
+		assertEquals(Integer.class, result);
+	}
+	
+	@Test
+	public void testGetFieldTypeBookId() {
+		Object result = service.getFieldType(FIELD_BOOK_ID);
+		assertEquals(String.class, result);
+	}
+	
+	@Test
+	public void testGetSort() {
+		Sort sort = service.getSort(filters);
+		assertEquals("stars: DESC", sort.toString());
+	}
+	
+	@Test
+	public void testGetSortSomeFields() {
+		filters = new TreeMap<>();
+		filters.put(FIELD_XPTO, FIELD_XPTO);
+		filters.put(FIELD_BOOK_ID, "teste");
+		filters.put(FIELD_STARS, "teste");
+		filters.put(ORDERBY, "stars,xpto,bookId");
+		Sort sort = service.getSort(filters);
+		assertEquals("stars: ASC,bookId: ASC", sort.toString());
 	}
 	
 }

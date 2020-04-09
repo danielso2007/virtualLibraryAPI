@@ -12,9 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import javax.validation.ValidationException;
 
+import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,8 +25,11 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.commons.services.impl.BaseServiceImpl;
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.entity.Book.BookBuilder;
@@ -34,6 +39,11 @@ import br.com.virtuallibrary.repositories.BookRepository;
 @RunWith(SpringRunner.class)
 public class BookServicesTest {
 
+	private static final String ORDERBY = "orderby";
+	private static final String FIELD_TITLE = "title";
+	private static final String FIELD_AUTHOR = "author";
+	private static final String FIELD_XPTO = "xpto";
+	private static final String FILTER_FORMAT = "$%s";
 	private static final String LETTING_GO = "Letting Go";
 	private static final String PHILIP_ROTH = "Philip Roth";
 	private static final String TITLE = "O Símbolo Perdido de Dan Brown";
@@ -42,6 +52,8 @@ public class BookServicesTest {
 
 	private Book ENTITY;
 	private Book ENTITY_ID;
+	
+	private Map<String, String> filters;
 
 	@MockBean
 	private BookRepository repository;
@@ -61,6 +73,12 @@ public class BookServicesTest {
 		when(repository.findById(ID)).thenReturn(Optional.of(ENTITY_ID));
 		when(repository.findById(null)).thenReturn(Optional.empty());
 		when(repository.findAll()).thenReturn(list);
+		
+		filters = new TreeMap<>();
+		filters.put(FIELD_XPTO, FIELD_XPTO);
+		filters.put(FIELD_AUTHOR, "teste");
+		filters.put(FIELD_TITLE, "teste");
+		filters.put(ORDERBY, "author:desc");
 	}
 
 	@Test
@@ -175,13 +193,13 @@ public class BookServicesTest {
 		Map<String, String> updates = new HashMap<String, String>();
 		updates.put("Teste", null);
 		Exception exception = assertThrows(ValidationException.class, () -> service.update(updates, ID));
-		assertTrue(exception.getMessage().equals(String.format("O campo %s não existe.", "Teste")));
+		assertTrue(exception.getMessage().equals(String.format("The %s field does not exist.", "Teste")));
 	}
 
 	@Test
 	public void testUpdateEntityMapValues() throws SecurityException, IllegalArgumentException, IllegalAccessException {
 		Map<String, String> updates = new HashMap<String, String>();
-		updates.put("author", PHILIP_ROTH);
+		updates.put(FIELD_AUTHOR, PHILIP_ROTH);
 		System.out.println(ENTITY_ID);
 		assertTrue(service.update(updates, ID).isPresent());
 	}
@@ -191,4 +209,52 @@ public class BookServicesTest {
 		assertTrue(service.update(new HashMap<String, String>(), null).isEmpty());
 	}
 
+	@Test
+	public void testGetCriteriaByFilter$gt() {
+		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.$GREATER_THAN, new Object());
+		Document document = criteria.getCriteriaObject();
+		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.$GREATER_THAN)));
+	}
+	
+	@Test
+	public void testGetCriteriaByFilter$lte() {
+		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.$LESS_THAN_OR_EQUAL, new Object());
+		Document document = criteria.getCriteriaObject();
+		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.$LESS_THAN_OR_EQUAL)));
+	}
+	
+	@Test
+	public void testGetFilterValues() {
+		Map<String, String> filterValues = service.getFilterValues(filters);
+		assertTrue(!filterValues.containsKey(FIELD_XPTO));
+	}
+	
+	@Test
+	public void testGetFilterValuesSize() {
+		Map<String, String> filterValues = service.getFilterValues(filters);
+		assertTrue(filterValues.size() == 2);
+	}
+	
+	@Test
+	public void testGetFieldTypeAuthor() {
+		Object result = service.getFieldType(FIELD_AUTHOR);
+		assertEquals(String.class, result);
+	}
+	
+	@Test
+	public void testGetSort() {
+		Sort sort = service.getSort(filters);
+		assertEquals("author: DESC", sort.toString());
+	}
+	
+	@Test
+	public void testGetSortSomeFields() {
+		filters = new TreeMap<>();
+		filters.put(FIELD_XPTO, FIELD_XPTO);
+		filters.put(FIELD_AUTHOR, "teste");
+		filters.put(FIELD_TITLE, "teste");
+		filters.put(ORDERBY, "author,xpto,title");
+		Sort sort = service.getSort(filters);
+		assertEquals("author: ASC,title: ASC", sort.toString());
+	}
 }

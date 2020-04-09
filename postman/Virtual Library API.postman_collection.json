@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8d1ce299-e721-4fd5-bd48-3cf6db336c1b",
+		"_postman_id": "e7ac5907-1165-42cc-aeef-0784e29053b2",
 		"name": "Virtual Library API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -25,6 +25,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books?page=0&size=3",
 					"protocol": "http",
@@ -71,6 +75,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books?page=0&size=3&author=contains:Machado&title=contains:Dom",
 					"protocol": "http",
@@ -125,6 +133,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3",
 					"protocol": "http",
@@ -156,6 +168,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=5&stars=gte:2:lte:4",
 					"protocol": "http",
@@ -191,6 +207,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3&bookId=5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
@@ -288,6 +308,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books/5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
@@ -310,6 +334,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings/5e3b92162f89a422faa31230",
 					"protocol": "http",
@@ -388,6 +416,10 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3&bookId=5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
@@ -641,7 +673,118 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "AllBooksOrderByDesc",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/books?page=0&size=3&author=contains:Machado&orderby=author:desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"books"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						},
+						{
+							"key": "author",
+							"value": "contains:Machado"
+						},
+						{
+							"key": "orderby",
+							"value": "author:desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AllRatingOrderBy",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=5&orderby=stars:asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ratings"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						},
+						{
+							"key": "orderby",
+							"value": "stars:asc"
+						}
+					]
+				}
+			},
+			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

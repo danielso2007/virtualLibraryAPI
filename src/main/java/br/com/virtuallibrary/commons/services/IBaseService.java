@@ -9,6 +9,7 @@ import javax.validation.ValidationException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,6 +21,8 @@ import br.com.virtuallibrary.commons.repositories.IBaseRepository;
 public interface IBaseService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>> {
 
 	List<E> findAll();
+	
+	List<E> findAll(Sort sort);
 
 	Page<E> findPaginated(final int page, final int size);
 	
@@ -28,6 +31,8 @@ public interface IBaseService<E extends BaseEntity, ID extends Serializable, R e
 	Page<E> findAll(Query query, int page, int size);
 	
 	Page<E> findAll(Query query, int page, int size, List<Criteria> criterias);
+	
+	Page<E> findAll(Query query, int page, int size, List<Criteria> criterias, Sort sort);
 	
 	Page<E> getPage(List<E> results, Pageable pageable, Query query, List<Criteria> criterias);
 	
@@ -54,5 +59,9 @@ public interface IBaseService<E extends BaseEntity, ID extends Serializable, R e
 	Criteria createCriteriaByFilter(Query query, String field, String value, String regex);
 
 	Criteria createCriteriaByFilter(Query query, String field, String value);
+
+	Sort getSort(Map<String, String> filters);
+
+	Class<?> getFieldType(String field);
 
 }

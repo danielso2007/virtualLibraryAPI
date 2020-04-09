@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "862ed615-7350-48ef-9de9-ef763c336b53",
+		"_postman_id": "8d1ce299-e721-4fd5-bd48-3cf6db336c1b",
 		"name": "Virtual Library API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -25,10 +25,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books?page=0&size=3",
 					"protocol": "http",
@@ -75,10 +71,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books?page=0&size=3&author=contains:Machado&title=contains:Dom",
 					"protocol": "http",
@@ -133,10 +125,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3",
 					"protocol": "http",
@@ -168,10 +156,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=5&stars=gte:2:lte:4",
 					"protocol": "http",
@@ -207,10 +191,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3&bookId=5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
@@ -308,10 +288,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/books/5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
@@ -334,10 +310,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings/5e3b92162f89a422faa31230",
 					"protocol": "http",
@@ -416,10 +388,6 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/ratings?page=0&size=3&bookId=5dc4c9734e9b1214ed7a9e3a",
 					"protocol": "http",
@@ -531,6 +499,54 @@
 			"response": []
 		},
 		{
+			"name": "Update Rating PATH",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookId\": \"5dc4c9734e9b1214ed7a9e4a\",\n    \"stars\": 5\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/ratings/5e4a2eb77cfcdd3635c90f2e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ratings",
+						"5e4a2eb77cfcdd3635c90f2e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Update Book",
 			"request": {
 				"auth": {
@@ -577,6 +593,55 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Update Book PATH",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"author\":\"J. K. Rowling\",\n\t\"title\":\"Harry Potter\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/books/5e4a2f327cfcdd3635c90f2f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"books",
+						"5e4a2f327cfcdd3635c90f2f"
+					]
+				}
+			},
+			"response": []
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

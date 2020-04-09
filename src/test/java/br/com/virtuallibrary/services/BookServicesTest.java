@@ -257,4 +257,15 @@ public class BookServicesTest {
 		Sort sort = service.getSort(filters);
 		assertEquals("author: ASC,title: ASC", sort.toString());
 	}
+	
+	@Test
+	public void testGetSortSomeFieldsDirections() {
+		filters = new TreeMap<>();
+		filters.put(FIELD_XPTO, FIELD_XPTO);
+		filters.put(FIELD_AUTHOR, "teste");
+		filters.put(FIELD_TITLE, "teste");
+		filters.put(ORDERBY, "author:DESC,xpto,title:asc");
+		Sort sort = service.getSort(filters);
+		assertEquals("author: DESC,title: ASC", sort.toString());
+	}
 }

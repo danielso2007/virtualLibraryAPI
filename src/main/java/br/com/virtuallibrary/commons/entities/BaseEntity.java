@@ -2,8 +2,6 @@ package br.com.virtuallibrary.commons.entities;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotEmpty;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

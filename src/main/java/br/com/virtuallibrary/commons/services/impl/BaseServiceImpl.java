@@ -146,7 +146,7 @@ public class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R ex
 			});
 		}
 
-		return findAll(query, page, size, criterias);
+		return findAll(query, page, size, criterias, getSort(filters));
 	}
 	
 	@Override

@@ -2,8 +2,6 @@ package br.com.virtuallibrary.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,7 +23,6 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -82,15 +79,17 @@ public class RatingControllerTest extends TestBaseController {
 	@Test
 	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
 	public void testGetAll() throws Exception {
-		Exception exception = assertThrows(NestedServletException.class, () -> getHttpServletResponse(API, status().isOk()).getContentAsString());
-		assertTrue(exception.getMessage().equals("Request processing failed; nested exception is java.lang.IllegalArgumentException: Page must not be null!"));
+		String response = getHttpServletResponse(API, status().isOk()).getContentAsString();
+		String result = "{\"_embedded\":{\"ratings\":[{\"id\":\"5e3b92162f89a422faa3122f\",\"bookId\":\"5dc4c9734e9b1214ed7a9e3a\",\"stars\":4,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa3122f\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa3122f\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e3a\"}}},{\"id\":\"5e3b92162f89a422faa31230\",\"bookId\":\"5dc4c9734e9b1214ed7a9e4a\",\"stars\":3,\"updatedAt\":\"2020-02-17T06:08:55.173+0000\",\"updater\":\"admin\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31230\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31230\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e4a\"}}},{\"id\":\"5e3b92162f89a422faa31231\",\"bookId\":\"5dc4c9734e9b1214ed7a9e5a\",\"stars\":2,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31231\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31231\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e5a\"}}},{\"id\":\"5e3b92162f89a422faa31232\",\"bookId\":\"5dc4c9734e9b1214ed7a9e6a\",\"stars\":5,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31232\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31232\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e6a\"}}},{\"id\":\"5e3b92162f89a422faa31233\",\"bookId\":\"5dc4c9734e9b1214ed7a9e7a\",\"stars\":5,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31233\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31233\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e7a\"}}}]},\"_links\":{\"first\":{\"href\":\"http://localhost/api/v1/ratings?page=0&size=5\"},\"self\":{\"href\":\"http://localhost/api/v1/ratings?page=0&size=5\"},\"next\":{\"href\":\"http://localhost/api/v1/ratings?page=1&size=5\"},\"last\":{\"href\":\"http://localhost/api/v1/ratings?page=4&size=5\"}},\"page\":{\"size\":5,\"totalElements\":21,\"totalPages\":5,\"number\":0}}";
+		assertEquals(response, result);
 	}
 	
 	@Test
 	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
 	public void testGetAllBookId() throws Exception {
-		Exception exception = assertThrows(NestedServletException.class, () -> getHttpServletResponse(String.format("%s?bookId=%s", API, ID), status().isOk()).getContentAsString());
-		assertTrue(exception.getMessage().equals("Request processing failed; nested exception is java.lang.IllegalArgumentException: Page must not be null!"));
+		String response = getHttpServletResponse(String.format("%s?bookId=%s", API, ID), status().isOk()).getContentAsString();
+		String result = "{\"_embedded\":{\"ratings\":[{\"id\":\"5e3b92162f89a422faa31234\",\"bookId\":\"5dc4c9734e9b1214ed7a9e8a\",\"stars\":4,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31234\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e3b92162f89a422faa31234\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e8a\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings?bookId=5dc4c9734e9b1214ed7a9e8a&page=0&size=5\"}},\"page\":{\"size\":5,\"totalElements\":1,\"totalPages\":1,\"number\":0}}";
+		assertEquals(response, result);
 	}
 	
 	@Test

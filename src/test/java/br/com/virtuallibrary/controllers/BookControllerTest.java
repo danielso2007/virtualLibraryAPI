@@ -2,8 +2,6 @@ package br.com.virtuallibrary.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +24,6 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -84,8 +81,9 @@ public class BookControllerTest extends TestBaseController {
 		List<Book> list = new ArrayList<>();
 		list.add(ENTITY_01);
 		list.add(ENTITY_02);
-		Exception exception = assertThrows(NestedServletException.class, () -> getHttpServletResponse(API, status().isOk()).getContentAsString());
-		assertTrue(exception.getMessage().equals("Request processing failed; nested exception is java.lang.IllegalArgumentException: Page must not be null!"));
+		String response = getHttpServletResponse(API, status().isOk()).getContentAsString();
+		String result = "{\"_embedded\":{\"books\":[{\"id\":\"5dc4c9734e9b1214ed7a9e3a\",\"title\":\"Sítio do Pica-Pau Amarelo\",\"author\":\"Monteiro Lobato\",\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e3a\"},\"delete\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e3a\"}}},{\"id\":\"5dc4c9734e9b1214ed7a9e4a\",\"title\":\"O Guarani\",\"author\":\"José de Alencar\",\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e4a\"},\"delete\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e4a\"}}},{\"id\":\"5dc4c9734e9b1214ed7a9e6a\",\"title\":\"A Rosa do Povo\",\"author\":\"Carlos Drummond de Andrade\",\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e6a\"},\"delete\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e6a\"}}},{\"id\":\"5dc4c9734e9b1214ed7a9e7a\",\"title\":\"Dom Casmurro\",\"author\":\"Machado de Assis\",\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e7a\"},\"delete\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e7a\"}}},{\"id\":\"5dc4c9734e9b1214ed7a9e8a\",\"title\":\"Perto do Coração Selvagem\",\"author\":\"Clarice Lispector\",\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e8a\"},\"delete\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e8a\"}}}]},\"_links\":{\"first\":{\"href\":\"http://localhost/api/v1/books?page=0&size=5\"},\"self\":{\"href\":\"http://localhost/api/v1/books?page=0&size=5\"},\"next\":{\"href\":\"http://localhost/api/v1/books?page=1&size=5\"},\"last\":{\"href\":\"http://localhost/api/v1/books?page=3&size=5\"}},\"page\":{\"size\":5,\"totalElements\":20,\"totalPages\":4,\"number\":0}}";
+		assertEquals(response, result);
 	}
 	
 	@Test

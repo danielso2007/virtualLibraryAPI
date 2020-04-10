@@ -239,13 +239,13 @@ public class RatingServiceTest {
 	@Test
 	public void testGetFilterValues() {
 		Map<String, String> filterValues = service.getFilterValues(filters);
-		assertTrue(!filterValues.containsKey(FIELD_XPTO));
+		assertEquals(false, filterValues.containsKey(FIELD_XPTO));
 	}
 	
 	@Test
 	public void testGetFilterValuesSize() {
 		Map<String, String> filterValues = service.getFilterValues(filters);
-		assertTrue(filterValues.size() == 2);
+		assertEquals(2, filterValues.size());
 	}
 	
 	@Test

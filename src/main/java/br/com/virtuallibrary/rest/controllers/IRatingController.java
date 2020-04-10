@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.virtuallibrary.commons.IConstants;
-import br.com.virtuallibrary.commons.controllers.IBaseController;
+import br.com.virtuallibrary.commons.controllers.IDeleteController;
+import br.com.virtuallibrary.commons.controllers.ILoadController;
+import br.com.virtuallibrary.commons.controllers.ISaveAndUpdateController;
+import br.com.virtuallibrary.commons.controllers.ISearchController;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
-import br.com.virtuallibrary.commons.services.IBaseService;
+import br.com.virtuallibrary.commons.services.ICompleteService;
 import br.com.virtuallibrary.entity.Rating;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -23,8 +26,11 @@ public interface IRatingController<
 			E extends BaseEntity, 
 			ID extends Serializable, 
 			R extends IBaseRepository<E, ID>, 
-			S extends IBaseService<E, ID, R>, 
+			S extends ICompleteService<E, ID, R>, 
 			M extends RepresentationModel<M>>
-		extends IBaseController<E, ID, R, S, M> {
+		extends ISearchController<E, ID, R, S, M>,
+		        IDeleteController<E, ID, R, S, M>,
+		        ILoadController<E, ID, R, S, M>,
+		        ISaveAndUpdateController<E, ID, R, S, M> {
 
 }

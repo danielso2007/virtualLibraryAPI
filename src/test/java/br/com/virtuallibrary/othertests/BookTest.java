@@ -2,6 +2,7 @@ package br.com.virtuallibrary.othertests;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Date;
 
@@ -37,12 +38,12 @@ public class BookTest {
 
 	@Test
 	public void testEqualsObjectNull() {
-		assertTrue(!entity.equals(null));
+		assertEquals(false , entity.equals(null));
 	}
 	
 	@Test
 	public void testEqualsObjectNew() {
-		assertTrue(!entity.equals(new Object()));
+		assertEquals(false , entity.equals(new Object()));
 	}
 	
 	@Test
@@ -53,12 +54,12 @@ public class BookTest {
 	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void testEqualsObjectNoBook() {
-		assertTrue(!entity.equals(Integer.parseInt("12")));
+		assertEquals(false , entity.equals(Integer.parseInt("12")));
 	}
 
 	@Test
 	public void testEqualsNewBook() {
-		assertTrue(!entity.equals(Book.builder().build()));
+		assertEquals(false , entity.equals(Book.builder().build()));
 	}
 	
 	@Test

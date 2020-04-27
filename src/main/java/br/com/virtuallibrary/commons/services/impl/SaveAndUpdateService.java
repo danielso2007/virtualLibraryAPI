@@ -17,14 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Transactional(readOnly = true)
-public abstract class SaveAndUpdateServiceImpl<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
-		extends BaseServiceImpl<E, ID, R>
+public class SaveAndUpdateService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
+		extends DeleteService<E, ID, R>
 		implements ISaveAndUpdateService<E, ID, R> {
 
 	public static final String THE_FIELD_DOES_NOT_EXIST_FORMAT = "The %s field does not exist.";
 	public static final String THE_ENTITY_CANNOT_BE_NULL = "The entity cannot be null.";
 	
-	public SaveAndUpdateServiceImpl(R repository) {
+	public SaveAndUpdateService(R repository) {
 		super(repository);
 	}
 	

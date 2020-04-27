@@ -35,7 +35,8 @@ public interface ISearchController<
 		ID extends Serializable, 
 		R extends IBaseRepository<E, ID>, 
 		S extends ISearchService<E, ID, R>, 
-		M extends RepresentationModel<M>> {
+		M extends RepresentationModel<M>>
+    extends IBaseController<E, ID, R, S, M> {
 
 	S getService();
 

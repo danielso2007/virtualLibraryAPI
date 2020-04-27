@@ -38,12 +38,16 @@ public interface ISaveAndUpdateController<
 		ID extends Serializable, 
 		R extends IBaseRepository<E, ID>, 
 		S extends ISaveAndUpdateService<E, ID, R>, 
-		M extends RepresentationModel<M>> {
+		M extends RepresentationModel<M>>
+    extends IDeleteController <E, ID, R, S, M> {
 
+	@Override
 	S getService();
 
+	@Override
 	PagedResourcesAssembler<E> getPagedResourcesAssembler();
 	
+	@Override
 	RepresentationModelAssemblerSupport<E, M> getModelAssembler();
 
 	@ResponseStatus(HttpStatus.CREATED)

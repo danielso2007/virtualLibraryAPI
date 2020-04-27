@@ -12,11 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Transactional(readOnly = true)
-public abstract class LoadServiceImpl<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
-		extends BaseServiceImpl<E, ID, R>
+public class LoadService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
+		extends SearchService<E, ID, R>
 		implements ILoadService<E, ID, R> {
 
-	public LoadServiceImpl(R repository) {
+	public LoadService(R repository) {
 		super(repository);
 	}
 	

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
-import br.com.virtuallibrary.commons.services.ICrudService;
+import br.com.virtuallibrary.commons.services.IDeleteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,13 +32,17 @@ public interface IDeleteController<
 		E extends BaseEntity, 
 		ID extends Serializable, 
 		R extends IBaseRepository<E, ID>, 
-		S extends ICrudService<E, ID, R>, 
-		M extends RepresentationModel<M>> {
+		S extends IDeleteService<E, ID, R>, 
+		M extends RepresentationModel<M>>
+    extends ISearchController<E, ID, R, S, M> {
 
+	@Override
 	S getService();
 
+	@Override
 	PagedResourcesAssembler<E> getPagedResourcesAssembler();
 	
+	@Override
 	RepresentationModelAssemblerSupport<E, M> getModelAssembler();
 
 	@ResponseStatus(HttpStatus.OK)

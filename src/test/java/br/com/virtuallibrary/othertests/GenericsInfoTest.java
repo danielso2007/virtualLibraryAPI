@@ -14,14 +14,14 @@ import br.com.virtuallibrary.commons.utils.GenericsInfo;
 import br.com.virtuallibrary.commons.utils.GenericsUtils;
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.repositories.BookRepository;
-import br.com.virtuallibrary.services.BookService;
+import br.com.virtuallibrary.services.IBookService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class GenericsInfoTest {
 
 	@Autowired
-	private BookService service;
+	private IBookService service;
 	private GenericsInfo genericsInfo;
 	
 	@Before

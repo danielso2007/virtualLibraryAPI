@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  virtuallibraryapi-sonar:
+    container_name: virtuallibraryapi-sonar
+    image: sonarqube:8.2-community
+    # https://hub.docker.com/r/bitnami/sonarqube#configuration
+    environment:
+      - SONARQUBE_USERNAME=admin
+      - SONARQUBE_PASSWORD=admin
+      - SONARQUBE_START_TIMEOUT=300
+    volumes:
+      - "sonardata:/opt/sonarqube/data"
+      - "sonarlogs:/opt/sonarqube/log"
+      - "sonarextensions:/opt/sonarqube/extensions"
+    ports:
+      - 9001:9000
+      - 9092:9092
+    logging:
+      driver: json-file
+volumes:
+  sonardata:
+  sonarlogs:
+  sonarextensions:
+
+networks:
+  vlapi:
+    driver: bridge

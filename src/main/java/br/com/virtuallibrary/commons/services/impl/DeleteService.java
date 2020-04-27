@@ -11,11 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Transactional(readOnly = true)
-public abstract class DeleteServiceImpl<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
-        extends BaseServiceImpl<E, ID, R>
+public class DeleteService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
+        extends LoadService<E, ID, R>
 		implements IDeleteService<E, ID, R> {
 
-	public DeleteServiceImpl(R repository) {
+	public DeleteService(R repository) {
 		super(repository);
 	}
 

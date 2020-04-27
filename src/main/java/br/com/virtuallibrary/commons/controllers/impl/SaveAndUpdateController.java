@@ -13,78 +13,38 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import br.com.virtuallibrary.commons.controllers.IDeleteController;
-import br.com.virtuallibrary.commons.controllers.ILoadController;
 import br.com.virtuallibrary.commons.controllers.ISaveAndUpdateController;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
-import br.com.virtuallibrary.commons.services.ICrudService;
+import br.com.virtuallibrary.commons.services.ISaveAndUpdateService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class SaveAndUpdateController<
+public class SaveAndUpdateController<
 	    E extends BaseEntity,
 	    ID extends Serializable,
 	    R extends IBaseRepository<E, ID>,
-	    S extends ICrudService<E, ID, R>,
+	    S extends ISaveAndUpdateService<E, ID, R>,
 	    M extends RepresentationModel<M>>
-    implements IDeleteController<E, ID, R, S, M>,
-			   ILoadController<E, ID, R, S, M>,
-			   ISaveAndUpdateController<E, ID, R, S, M> {
-
-	private final S service;
-	private final RepresentationModelAssemblerSupport<E, M> modelAssembler;
-	private final PagedResourcesAssembler<E> pagedResourcesAssembler;
+    extends DeleteController<E, ID, R, S, M>
+    implements ISaveAndUpdateController<E, ID, R, S, M> {
 
 	public SaveAndUpdateController(S service, PagedResourcesAssembler<E> pagedResourcesAssembler, RepresentationModelAssemblerSupport<E, M> modelAssembler) {
-		this.service = service;
-		this.modelAssembler = modelAssembler;
-		this.pagedResourcesAssembler = pagedResourcesAssembler;
-	}
-
-	@Override
-	public final S getService() {
-		return service;
-	}
-	
-	@Override
-	public PagedResourcesAssembler<E> getPagedResourcesAssembler() {
-		return pagedResourcesAssembler;
-	}
-
-	@Override
-	public RepresentationModelAssemblerSupport<E, M> getModelAssembler() {
-		return this.modelAssembler;
-	}
-	
-	@Override
-	public ResponseEntity<M> find(@PathVariable ID id) {
-		return service.findById(id) 
-			.map(modelAssembler::toModel) 
-			.map(ResponseEntity::ok) 
-			.orElse(ResponseEntity.notFound().build());
+		super(service, pagedResourcesAssembler, modelAssembler);
 	}
 
 	@Override
 	public ResponseEntity<M> create(@RequestBody @Valid E object) {
-		return service.save(object)
-				.map(modelAssembler::toModel) 
+		return getService().save(object)
+				.map(getModelAssembler()::toModel) 
 				.map(entity -> ResponseEntity.status(HttpStatus.CREATED).body(entity)) 
 				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@Override
-	public ResponseEntity<Object> delete(@PathVariable ID id) {
-		return service.findById(id).map(entity -> {
-			service.delete(id);
-			return ResponseEntity.ok().build();
-		}).orElse(ResponseEntity.notFound().build());
-	}
-
-	@Override
 	public ResponseEntity<M> update(@RequestBody @Valid E object, @PathVariable ID id) {
-		return service.update(object, id)
-				.map(modelAssembler::toModel) 
+		return getService().update(object, id)
+				.map(getModelAssembler()::toModel) 
 				.map(ResponseEntity::ok) 
 				.orElse(ResponseEntity.notFound().build());
 	}
@@ -97,8 +57,8 @@ public abstract class SaveAndUpdateController<
 	                                    IllegalArgumentException,
 	                                    IllegalAccessException {
 		try {
-			return service.update(updates, id)
-			.map(modelAssembler::toModel) 
+			return getService().update(updates, id)
+			.map(getModelAssembler()::toModel) 
 			.map(ResponseEntity::ok) 
 			.orElse(ResponseEntity.notFound().build());
 		} catch (Exception e) {

@@ -14,7 +14,7 @@ import br.com.virtuallibrary.commons.controllers.ISaveAndUpdateController;
 import br.com.virtuallibrary.commons.controllers.ISearchController;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
-import br.com.virtuallibrary.commons.services.ICompleteService;
+import br.com.virtuallibrary.commons.services.ISaveAndUpdateService;
 import br.com.virtuallibrary.entity.Book;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -26,7 +26,7 @@ public interface IBookController<
 			E extends BaseEntity, 
 			ID extends Serializable, 
 			R extends IBaseRepository<E, ID>, 
-			S extends ICompleteService<E, ID, R>, 
+			S extends ISaveAndUpdateService<E, ID, R>, 
 			M extends RepresentationModel<M>>
 		extends ISearchController<E, ID, R, S, M>,
 		        IDeleteController<E, ID, R, S, M>,

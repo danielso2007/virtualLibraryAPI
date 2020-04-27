@@ -30,7 +30,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.virtuallibrary.commons.IConstants;
-import br.com.virtuallibrary.commons.services.impl.BaseServiceImpl;
+import br.com.virtuallibrary.commons.services.impl.BaseService;
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.entity.Book.BookBuilder;
 import br.com.virtuallibrary.repositories.BookRepository;
@@ -59,7 +59,7 @@ public class BookServicesTest {
 	private BookRepository repository;
 
 	@Autowired
-	private BookService service;
+	private IBookService service;
 
 	@Before
 	public void setUp() {
@@ -179,7 +179,7 @@ public class BookServicesTest {
 	public void testUpdateEntityNull() {
 		Book entity = null;
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> service.update(entity, ID));
-		assertTrue(exception.getMessage().equals(BaseServiceImpl.THE_ENTITY_CANNOT_BE_NULL));
+		assertTrue(exception.getMessage().equals(BaseService.THE_ENTITY_CANNOT_BE_NULL));
 	}
 	
 	@Test

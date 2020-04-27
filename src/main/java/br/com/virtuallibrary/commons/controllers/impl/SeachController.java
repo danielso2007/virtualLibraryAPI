@@ -16,39 +16,19 @@ import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
 import br.com.virtuallibrary.commons.services.ISearchService;
 
-public abstract class SeachController<
+public class SeachController<
 	    E extends BaseEntity,
 	    ID extends Serializable,
 	    R extends IBaseRepository<E, ID>,
 	    S extends ISearchService<E, ID, R>,
 	    M extends RepresentationModel<M>>
+    extends BaseController<E, ID, R, S, M>
     implements ISearchController<E, ID, R, S, M> {
 
-	private final S service;
-	private final RepresentationModelAssemblerSupport<E, M> modelAssembler;
-	private final PagedResourcesAssembler<E> pagedResourcesAssembler;
-
 	public SeachController(S service, PagedResourcesAssembler<E> pagedResourcesAssembler, RepresentationModelAssemblerSupport<E, M> modelAssembler) {
-		this.service = service;
-		this.modelAssembler = modelAssembler;
-		this.pagedResourcesAssembler = pagedResourcesAssembler;
+		super(service, pagedResourcesAssembler, modelAssembler);
 	}
 
-	@Override
-	public final S getService() {
-		return service;
-	}
-	
-	@Override
-	public PagedResourcesAssembler<E> getPagedResourcesAssembler() {
-		return pagedResourcesAssembler;
-	}
-
-	@Override
-	public RepresentationModelAssemblerSupport<E, M> getModelAssembler() {
-		return this.modelAssembler;
-	}
-	
 	@Override
 	public ResponseEntity<CollectionModel<M>> findAll(
 			@RequestParam(value = "page", required = false, defaultValue = IConstants.defaultPage) int page,

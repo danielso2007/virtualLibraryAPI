@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.entity.Rating;
 import br.com.virtuallibrary.repositories.RatingRepository;
-import br.com.virtuallibrary.services.RatingService;
+import br.com.virtuallibrary.services.IRatingService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,7 +46,7 @@ public class RatingControllerTest extends TestBaseController {
 	private RatingRepository repository;
 
 	@Autowired
-	private RatingService service;
+	private IRatingService service;
 
 	private JacksonTester<Rating> jsonEntity;
 
@@ -80,7 +80,7 @@ public class RatingControllerTest extends TestBaseController {
 	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
 	public void testGetAll() throws Exception {
 		String response = getHttpServletResponse(API + "?sorteby=id", status().isOk()).getContentAsString();
-		String result = "{\"_embedded\":{\"ratings\":[{\"id\":\"5e87ae4b0111375274c3b2e2\",\"bookId\":\"5dc4c9734e9b1214ed7a9e3a\",\"stars\":4,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e2\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e2\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e3a\"}}},{\"id\":\"5e87ae4b0111375274c3b2e3\",\"bookId\":\"5dc4c9734e9b1214ed7a9e5a\",\"stars\":2,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e3\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e3\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e5a\"}}},{\"id\":\"5e87ae4b0111375274c3b2e4\",\"bookId\":\"5dc4c9734e9b1214ed7a9e7a\",\"stars\":5,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e4\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e4\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e7a\"}}},{\"id\":\"5e87ae4b0111375274c3b2e5\",\"bookId\":\"5dc4c9734e9b1214ed7a9e6a\",\"stars\":5,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e5\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e5\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e6a\"}}},{\"id\":\"5e87ae4b0111375274c3b2e6\",\"bookId\":\"5dc4c9734e9b1214ed7a9e8a\",\"stars\":4,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e6\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e6\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e8a\"}}}]},\"_links\":{\"first\":{\"href\":\"http://localhost/api/v1/ratings?sorteby=id&page=0&size=5\"},\"self\":{\"href\":\"http://localhost/api/v1/ratings?sorteby=id&page=0&size=5\"},\"next\":{\"href\":\"http://localhost/api/v1/ratings?sorteby=id&page=1&size=5\"},\"last\":{\"href\":\"http://localhost/api/v1/ratings?sorteby=id&page=3&size=5\"}},\"page\":{\"size\":5,\"totalElements\":19,\"totalPages\":4,\"number\":0}}";
+		String result = "{\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings?sorteby=id&page=0&size=5\"}},\"page\":{\"size\":5,\"totalElements\":0,\"totalPages\":0,\"number\":0}}";
 		assertEquals(response, result);
 	}
 	
@@ -88,7 +88,7 @@ public class RatingControllerTest extends TestBaseController {
 	@WithMockUser(username=ADMIN,roles={USER_ROLE,ADMIN_ROLE})
 	public void testGetAllBookId() throws Exception {
 		String response = getHttpServletResponse(String.format("%s?bookId=%s&sorteby=id", API, ID), status().isOk()).getContentAsString();
-		String result = "{\"_embedded\":{\"ratings\":[{\"id\":\"5e87ae4b0111375274c3b2e6\",\"bookId\":\"5dc4c9734e9b1214ed7a9e8a\",\"stars\":4,\"createdAt\":\"2020-01-06T12:00:00.212+0000\",\"creator\":\"Anonymous\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e6\"},\"delete\":{\"href\":\"http://localhost/api/v1/ratings/5e87ae4b0111375274c3b2e6\"},\"book\":{\"href\":\"http://localhost/api/v1/books/5dc4c9734e9b1214ed7a9e8a\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings?bookId=5dc4c9734e9b1214ed7a9e8a&sorteby=id&page=0&size=5\"}},\"page\":{\"size\":5,\"totalElements\":1,\"totalPages\":1,\"number\":0}}";
+		String result = "{\"_links\":{\"self\":{\"href\":\"http://localhost/api/v1/ratings?bookId=5dc4c9734e9b1214ed7a9e8a&sorteby=id&page=0&size=5\"}},\"page\":{\"size\":5,\"totalElements\":0,\"totalPages\":0,\"number\":0}}";
 		assertEquals(response, result);
 	}
 	

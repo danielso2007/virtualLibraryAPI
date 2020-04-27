@@ -3,16 +3,16 @@ package br.com.virtuallibrary.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.virtuallibrary.commons.services.impl.CompleteServiceImpl;
+import br.com.virtuallibrary.commons.services.impl.SaveAndUpdateService;
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.repositories.BookRepository;
-import br.com.virtuallibrary.services.BookService;
+import br.com.virtuallibrary.services.IBookService;
 
 @Service
-public class BookServicesImpl extends CompleteServiceImpl<Book, String, BookRepository> implements BookService {
+public class BookService extends SaveAndUpdateService<Book, String, BookRepository> implements IBookService {
 
 	@Autowired
-	public BookServicesImpl(BookRepository repository) {
+	public BookService(BookRepository repository) {
 		super(repository);
 	}
 

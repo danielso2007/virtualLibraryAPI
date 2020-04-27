@@ -243,8 +243,8 @@
 						</goals>
 						<configuration>
 							<excludes>
-								<exclude>**/*SomeJava8ExamplesApplication.*</exclude>
-								<exclude>br/com/somejava8examples/commons/entities*</exclude>
+								<exclude>**/*VirtualLibraryApiApplication.*</exclude>
+								<exclude>br/com/virtuallibrary/commons/**/*</exclude>
 							</excludes>
 							<rules>
 								<rule>

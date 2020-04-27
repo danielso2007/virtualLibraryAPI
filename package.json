@@ -1,6 +1,6 @@
 {
   "name": "virtuallibraryapi",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Study of Java REST and Spring Boot projects.",
   "scripts": {
     "release": "standard-version",

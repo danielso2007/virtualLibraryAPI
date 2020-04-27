@@ -28,7 +28,7 @@ import br.com.virtuallibrary.commons.services.IBaseService;
 import br.com.virtuallibrary.commons.utils.GenericsUtils;
 
 @Transactional(readOnly = true)
-public abstract class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
+public abstract class BaseService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
 		implements IBaseService<E, ID, R> {
 
 	public static final String THE_FIELD_DOES_NOT_EXIST_FORMAT = "The %s field does not exist.";
@@ -41,7 +41,7 @@ public abstract class BaseServiceImpl<E extends BaseEntity, ID extends Serializa
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	public BaseServiceImpl(R repository) {
+	public BaseService(R repository) {
 		this.repository = repository;
 		this.entityClass = GenericsUtils.getGenericsInfo(this).getType(0);
 	}

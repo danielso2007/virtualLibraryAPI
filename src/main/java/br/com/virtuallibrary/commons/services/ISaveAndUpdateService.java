@@ -10,7 +10,7 @@ import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
 
 public interface ISaveAndUpdateService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
-	extends IBaseService<E, ID, R> {
+	extends IDeleteService<E, ID, R> {
 
 	Optional<E> save(E object);
 

@@ -30,14 +30,14 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.virtuallibrary.commons.IConstants;
-import br.com.virtuallibrary.commons.services.impl.BaseServiceImpl;
+import br.com.virtuallibrary.commons.services.impl.BaseService;
 import br.com.virtuallibrary.entity.Rating;
 import br.com.virtuallibrary.entity.Rating.RatingBuilder;
 import br.com.virtuallibrary.repositories.RatingRepository;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class RatingServiceTest {
+public class IRatingServiceTest {
 
 	private static final String FIELD_STARS = "stars";
 	private static final String FIELD_BOOK_ID = "bookId";
@@ -57,7 +57,7 @@ public class RatingServiceTest {
 	private RatingRepository repository;
 
 	@Autowired
-	private RatingService service;
+	private IRatingService service;
 
 	@Before
 	public void setUp() {
@@ -178,7 +178,7 @@ public class RatingServiceTest {
 	public void testUpdateEntityNull() {
 		Rating entity = null;
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> service.update(entity, ID));
-		assertTrue(exception.getMessage().equals(BaseServiceImpl.THE_ENTITY_CANNOT_BE_NULL));
+		assertTrue(exception.getMessage().equals(BaseService.THE_ENTITY_CANNOT_BE_NULL));
 	}
 	
 	@Test
@@ -191,7 +191,7 @@ public class RatingServiceTest {
 		Map<String, String> updates = new HashMap<String, String>();
 		updates.put("Teste", null);
 		Exception exception = assertThrows(ValidationException.class, () -> service.update(updates, ID));
-		assertTrue(exception.getMessage().equals(String.format(BaseServiceImpl.THE_FIELD_DOES_NOT_EXIST_FORMAT, "Teste")));
+		assertTrue(exception.getMessage().equals(String.format(BaseService.THE_FIELD_DOES_NOT_EXIST_FORMAT, "Teste")));
 	}
 	
 	@Test

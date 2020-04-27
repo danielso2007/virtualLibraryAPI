@@ -1,5 +1,6 @@
 [![Actions Status](https://github.com/danielso2007/virtualLibraryAPI/workflows/virtualLibraryAPI/badge.svg)](https://github.com/danielso2007/virtualLibraryAPI/actions)
 [![codecov](https://codecov.io/gh/danielso2007/virtualLibraryAPI/branch/develop/graph/badge.svg)](https://codecov.io/gh/danielso2007/virtualLibraryAPI)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=danielso2007_virtualLibraryAPI&metric=alert_status)](https://sonarcloud.io/dashboard?id=danielso2007_virtualLibraryAPI)
 ![GitHub package version](https://img.shields.io/github/package-json/v/danielso2007/virtualLibraryAPI.svg)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/danielso2007/virtualLibraryAPI.svg)](https://github.com/danielso2007/virtualLibraryAPI/pulls)
 [![GitHub issues](https://img.shields.io/github/issues/danielso2007/virtualLibraryAPI.svg)](https://github.com/danielso2007/virtualLibraryAPI/issues?q=is%3Aopen+is%3Aissue)

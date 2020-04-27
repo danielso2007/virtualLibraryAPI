@@ -53,7 +53,7 @@ Os testes são executados normalmente quando construído para **produção** e n
 
 É utilizado o [EclEmma Jacoco](https://www.eclemma.org/jacoco/) para verificação de cobertura de código. Para executar a cobertura:
 ```
-mvn clean test -Ptest jacoco:report
+mvn clean test verify -Ptest jacoco:report
 ```
 Na pasta target, é gerado um "site" mostrando toda a cobertura de código. Este projeto utiliza o _Action_ para os testes e build da aplicação. Ao final do teste, é enviado para [codecov.io](https://codecov.io) todo o relatório. Para verificar a cobertura de teste deste código, acesse [codecov.io/gh/danielso2007]([codecov.io](https://codecov.io/gh/danielso2007/virtualLibraryAPI)).
 
@@ -65,6 +65,29 @@ Para ver a imagem criada, digite no terminal o comando `docker images`.
 Para "rodar" a imagem, execute:
 ```
 docker run -p 8080:8080 --name swapi  virtualLibraryAPI:<project.version>
+```
+
+### Code quality
+
+O sonar é usado para analisar a qualidade do código. Você pode iniciar um servidor Sonar local (acessível em http: // localhost: 9001) com:
+
+```
+docker-compose -f src/main/docker/sonar.yml up -d
+```
+
+Você pode executar uma análise do Sonar usando o scanner de sonar ou usando o plugin maven.
+
+Em seguida, execute uma análise do sonar:
+
+```
+mvn -Ptest clean verify jacoco:report sonar:sonar
+```
+
+Se você precisar executar novamente a fase do Sonar, especifique pelo menos a fase de inicialização, já que as propriedades do Sonar são carregadas do arquivo sonar-project.properties.
+
+```
+mvn clean test verify -Ptest jacoco:report
+mvn initialize sonar:sonar
 ```
 
 ### Documentação da API - swagger (OpenAPI 3):

@@ -17,9 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Transactional(readOnly = true)
-public class SaveAndUpdateService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
-		extends DeleteService<E, ID, R>
-		implements ISaveAndUpdateService<E, ID, R> {
+public class SaveAndUpdateService<E extends BaseEntity, K extends Serializable, R extends IBaseRepository<E, K>>
+		extends DeleteService<E, K, R>
+		implements ISaveAndUpdateService<E, K, R> {
 
 	public static final String THE_FIELD_DOES_NOT_EXIST_FORMAT = "The %s field does not exist.";
 	public static final String THE_ENTITY_CANNOT_BE_NULL = "The entity cannot be null.";
@@ -33,39 +33,45 @@ public class SaveAndUpdateService<E extends BaseEntity, ID extends Serializable,
 	public Optional<E> save(E entity) {
 		checkAuditedEntity(entity);
 		log.debug(String.format("Saving %s record.", getEntityClass().toString()));
-		Optional<E> opt = Optional.ofNullable(getRepository().save(entity));
-		return opt;
+		return Optional.ofNullable(getRepository().save(entity));
 	}
 
 	@Override
 	@Transactional
-	public Optional<E> update(Map<String, String> updates, ID id)
-			throws ValidationException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public Optional<E> update(Map<String, String> updates, K id)
+			throws IllegalAccessException {
 		Optional<E> opt = getRepository().findById(id);
 		if (opt.isEmpty()) {
 			return Optional.empty();
 		}
 		log.debug(String.format("Updating %s record fields: %s", getEntityClass().toString(), id));
 		E entity = opt.get();
-		for (String fieldUpdate : updates.keySet()) {
+		updates.entrySet().forEach(map -> {
 			Field declaredField;
 			try {
-				declaredField = getEntityClass().getDeclaredField(fieldUpdate);
+				declaredField = getEntityClass().getDeclaredField(map.getKey());
 			} catch (NoSuchFieldException e) {
-				throw new ValidationException(String.format(THE_FIELD_DOES_NOT_EXIST_FORMAT, fieldUpdate));
+				throw new ValidationException(String.format(THE_FIELD_DOES_NOT_EXIST_FORMAT, map.getKey()));
 			}
 			boolean accessible = declaredField.canAccess(entity);
 			declaredField.setAccessible(true);
-			declaredField.set(entity, getValueByFieldType(declaredField.getName(), updates.get(fieldUpdate)));
+			try {
+				declaredField.set(entity, getValueByFieldType(declaredField.getName(), map.getValue()));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+				log.error(e.getMessage(), e);
+				throw new IllegalArgumentException(e);
+				
+			}
 			declaredField.setAccessible(accessible);
-		}
+		});
 		checkAuditedEntity(entity);
 		return Optional.of(getRepository().save(entity));
 	}
 
 	@Override
 	@Transactional
-	public Optional<E> update(E entity, ID id) {
+	public Optional<E> update(E entity, K id) {
 		if (entity == null) {
 			throw new IllegalArgumentException(THE_ENTITY_CANNOT_BE_NULL);
 		}

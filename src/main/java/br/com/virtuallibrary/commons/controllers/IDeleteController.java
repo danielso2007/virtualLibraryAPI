@@ -24,17 +24,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * @author Daniel Oliveira
  *
  * @param <E> Representa a entidade.
- * @param <ID> Representa o tipo identificador da entidade.
+ * @param <K> Representa o tipo identificador da entidade.
  * @param <R> Representa o repositório do entidade.
  * @param <S> Representa o serviço da entidade.
  */
 public interface IDeleteController<
 		E extends BaseEntity, 
-		ID extends Serializable, 
-		R extends IBaseRepository<E, ID>, 
-		S extends IDeleteService<E, ID, R>, 
+		K extends Serializable, 
+		R extends IBaseRepository<E, K>, 
+		S extends IDeleteService<E, K, R>, 
 		M extends RepresentationModel<M>>
-    extends ISearchController<E, ID, R, S, M> {
+    extends ISearchController<E, K, R, S, M> {
 
 	@Override
 	S getService();
@@ -52,6 +52,6 @@ public interface IDeleteController<
 			@ApiResponse(responseCode = "200", description = "Registro deletado com sucesso"),
 			@ApiResponse(responseCode = "404", description = "Registro não encontrado."),
 			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
-	ResponseEntity<Object> delete(@Parameter(description="Id do registro a ser deletado. Não pode ser vazio.", required=true) ID id);
+	ResponseEntity<Object> delete(@Parameter(description="Id do registro a ser deletado. Não pode ser vazio.", required=true) K id);
 
 }

@@ -24,13 +24,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Book", description = "The Book API")
 public interface IBookController<
 			E extends BaseEntity, 
-			ID extends Serializable, 
-			R extends IBaseRepository<E, ID>, 
-			S extends ISaveAndUpdateService<E, ID, R>, 
+			K extends Serializable, 
+			R extends IBaseRepository<E, K>, 
+			S extends ISaveAndUpdateService<E, K, R>, 
 			M extends RepresentationModel<M>>
-		extends ISearchController<E, ID, R, S, M>,
-		        IDeleteController<E, ID, R, S, M>,
-		        ILoadController<E, ID, R, S, M>,
-		        ISaveAndUpdateController<E, ID, R, S, M> {
+		extends ISearchController<E, K, R, S, M>,
+		        IDeleteController<E, K, R, S, M>,
+		        ILoadController<E, K, R, S, M>,
+		        ISaveAndUpdateController<E, K, R, S, M> {
 
 }

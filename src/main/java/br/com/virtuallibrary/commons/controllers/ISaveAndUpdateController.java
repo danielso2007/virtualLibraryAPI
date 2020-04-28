@@ -29,17 +29,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * @author Daniel Oliveira
  *
  * @param <E> Representa a entidade.
- * @param <ID> Representa o tipo identificador da entidade.
+ * @param <K> Representa o tipo identificador da entidade.
  * @param <R> Representa o repositório do entidade.
  * @param <S> Representa o serviço da entidade.
  */
 public interface ISaveAndUpdateController<
 		E extends BaseEntity, 
-		ID extends Serializable, 
-		R extends IBaseRepository<E, ID>, 
-		S extends ISaveAndUpdateService<E, ID, R>, 
+		K extends Serializable, 
+		R extends IBaseRepository<E, K>, 
+		S extends ISaveAndUpdateService<E, K, R>, 
 		M extends RepresentationModel<M>>
-    extends IDeleteController <E, ID, R, S, M> {
+    extends IDeleteController <E, K, R, S, M> {
 
 	@Override
 	S getService();
@@ -70,7 +70,7 @@ public interface ISaveAndUpdateController<
 			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
 	ResponseEntity<M> update(
 			@Parameter(description="O registro a ser atualizado.", required=true) @Valid E object,
-			@Parameter(description="Id do registro a ser atualizado. Não pode ser vazio.", required=true) ID id);
+			@Parameter(description="Id do registro a ser atualizado. Não pode ser vazio.", required=true) K id);
 
 	@ResponseStatus(HttpStatus.OK)
 	@PatchMapping(value = "/{id}", produces = { IConstants.APPLICATION_JSON_UTF_8, IConstants.APPLICATION_XML_UTF_8 })
@@ -81,7 +81,7 @@ public interface ISaveAndUpdateController<
 			@ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
 	ResponseEntity<M> update(
 			@Parameter(description="Os campos a serem atualizado no registro.", required=true) Map<String, String> updates,
-			@Parameter(description="Id do registro a ser atualizado. Não pode ser vazio.", required=true) ID id)
-		throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
+			@Parameter(description="Id do registro a ser atualizado. Não pode ser vazio.", required=true) K id)
+		throws NoSuchFieldException, IllegalAccessException;
 
 }

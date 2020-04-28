@@ -15,19 +15,19 @@ import br.com.virtuallibrary.commons.services.ILoadService;
 
 public class LoadController<
 	    E extends BaseEntity,
-	    ID extends Serializable,
-	    R extends IBaseRepository<E, ID>,
-	    S extends ILoadService<E, ID, R>,
+	    K extends Serializable,
+	    R extends IBaseRepository<E, K>,
+	    S extends ILoadService<E, K, R>,
 	    M extends RepresentationModel<M>>
-    extends SeachController<E, ID, R, S, M>
-    implements ILoadController<E, ID, R, S, M> {
+    extends SeachController<E, K, R, S, M>
+    implements ILoadController<E, K, R, S, M> {
 
 	public LoadController(S service, PagedResourcesAssembler<E> pagedResourcesAssembler, RepresentationModelAssemblerSupport<E, M> modelAssembler) {
 		super(service, pagedResourcesAssembler, modelAssembler);
 	}
 
 	@Override
-	public ResponseEntity<M> find(@PathVariable ID id) {
+	public ResponseEntity<M> find(@PathVariable K id) {
 		return getService().findById(id) 
 			.map(getModelAssembler()::toModel) 
 			.map(ResponseEntity::ok) 

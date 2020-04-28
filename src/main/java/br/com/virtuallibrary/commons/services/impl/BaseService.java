@@ -28,12 +28,12 @@ import br.com.virtuallibrary.commons.services.IBaseService;
 import br.com.virtuallibrary.commons.utils.GenericsUtils;
 
 @Transactional(readOnly = true)
-public abstract class BaseService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
-		implements IBaseService<E, ID, R> {
+public abstract class BaseService<E extends BaseEntity, K extends Serializable, R extends IBaseRepository<E, K>>
+		implements IBaseService<E, K, R> {
 
 	public static final String THE_FIELD_DOES_NOT_EXIST_FORMAT = "The %s field does not exist.";
 	public static final String THE_ENTITY_CANNOT_BE_NULL = "The entity cannot be null.";
-	public final String ANONYMOUS = "Anonymous";
+	public static final String ANONYMOUS = "Anonymous";
 	
 	private final R repository;
 	private final Class<E> entityClass;
@@ -94,19 +94,19 @@ public abstract class BaseService<E extends BaseEntity, ID extends Serializable,
 	
 	@Override
 	public Class<?> getFieldType(String field) {
-		Class<?> $class = null;
+		Class<?> _class = null;
 		for (java.beans.PropertyDescriptor pd : getPropertyDescriptor()) {
 			if (pd.getName().equalsIgnoreCase(field)) {
-				$class = pd.getPropertyType();
+				_class = pd.getPropertyType();
 			}
 		}
-		return $class;
+		return _class;
 	}
 	
 	@Override
 	public Query addCriterias(Query query, List<Criteria> criterias) {
 		if (criterias != null) {
-			criterias.forEach(criteriaDefinition -> query.addCriteria(criteriaDefinition));
+			criterias.forEach(query::addCriteria);
 		}
 		return query;
 	}
@@ -139,10 +139,10 @@ public abstract class BaseService<E extends BaseEntity, ID extends Serializable,
 	}
 	
 	protected Object getValueByFieldType(String field, String value) {
-		Class<?> $class = getFieldType(field);
-		if ($class.equals(Integer.class)) {
+		Class<?> _class = getFieldType(field);
+		if (_class.equals(Integer.class)) {
 			return Integer.valueOf(value);
-		} if ($class.equals(int.class)) {
+		} else if (_class.equals(int.class)) {
 			return Integer.parseInt(value);
 		} else {
 			return value;

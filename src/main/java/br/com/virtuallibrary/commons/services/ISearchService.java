@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
 
-public interface ISearchService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
-	extends IBaseService<E, ID, R> {
+public interface ISearchService<E extends BaseEntity, K extends Serializable, R extends IBaseRepository<E, K>>
+	extends IBaseService<E, K, R> {
 
 	List<E> findAll();
 	

@@ -26,17 +26,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * @author Daniel Oliveira
  *
  * @param <E> Representa a entidade.
- * @param <ID> Representa o tipo identificador da entidade.
+ * @param <K> Representa o tipo identificador da entidade.
  * @param <R> Representa o repositório do entidade.
  * @param <S> Representa o serviço da entidade.
  */
 public interface ISearchController<
 		E extends BaseEntity, 
-		ID extends Serializable, 
-		R extends IBaseRepository<E, ID>, 
-		S extends ISearchService<E, ID, R>, 
+		K extends Serializable, 
+		R extends IBaseRepository<E, K>, 
+		S extends ISearchService<E, K, R>, 
 		M extends RepresentationModel<M>>
-    extends IBaseController<E, ID, R, S, M> {
+    extends IBaseController<E, K, R, S, M> {
 
 	S getService();
 

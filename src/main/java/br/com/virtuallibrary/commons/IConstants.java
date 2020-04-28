@@ -25,8 +25,8 @@ public interface IConstants {
 	String SLASH = "/";
 	String BACKSLASH = "\\";
 	
-	String defaultPage = "0";
-	String defaultSize = "5";
+	String DEFAULT_PAGE = "0";
+	String DEFAULT_SIZE = "5";
 
 	String V1 = "v1/";
 	String ROOT_URL = "/api/";
@@ -35,14 +35,14 @@ public interface IConstants {
 	String RATINGS= IConstants.ROOT_URL + IConstants.V1 + "ratings";
 
 	// MONGODB
-	String $AND = "$and";
-	String $REGEX_CONTAINS = ".*%s.*";
+	String AND = "$and";
+	String REGEX_CONTAINS = ".*%s.*";
 	
-	String $CONTAINS = "contains";
-	String $GREATER_THAN = "gt";
-	String $GREATER_THAN_OR_EQUAL = "gte";
-	String $LESS_THAN = "lt";
-	String $LESS_THAN_OR_EQUAL = "lte";
-	String $EQ = "eq";
+	String CONTAINS = "contains";
+	String GREATER_THAN = "gt";
+	String GREATER_THAN_OR_EQUAL = "gte";
+	String LESS_THAN = "lt";
+	String LESS_THAN_OR_EQUAL = "lte";
+	String EQ = "eq";
 }
 

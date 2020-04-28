@@ -12,9 +12,9 @@ import br.com.virtuallibrary.commons.services.IBaseService;
 
 public abstract class BaseController<
 	    E extends BaseEntity,
-	    ID extends Serializable,
-	    R extends IBaseRepository<E, ID>,
-	    S extends IBaseService<E, ID, R>,
+	    K extends Serializable,
+	    R extends IBaseRepository<E, K>,
+	    S extends IBaseService<E, K, R>,
 	    M extends RepresentationModel<M>> {
 
 	private final S service;

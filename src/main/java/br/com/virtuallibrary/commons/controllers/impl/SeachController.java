@@ -18,12 +18,12 @@ import br.com.virtuallibrary.commons.services.ISearchService;
 
 public class SeachController<
 	    E extends BaseEntity,
-	    ID extends Serializable,
-	    R extends IBaseRepository<E, ID>,
-	    S extends ISearchService<E, ID, R>,
+	    K extends Serializable,
+	    R extends IBaseRepository<E, K>,
+	    S extends ISearchService<E, K, R>,
 	    M extends RepresentationModel<M>>
-    extends BaseController<E, ID, R, S, M>
-    implements ISearchController<E, ID, R, S, M> {
+    extends BaseController<E, K, R, S, M>
+    implements ISearchController<E, K, R, S, M> {
 
 	public SeachController(S service, PagedResourcesAssembler<E> pagedResourcesAssembler, RepresentationModelAssemblerSupport<E, M> modelAssembler) {
 		super(service, pagedResourcesAssembler, modelAssembler);
@@ -31,8 +31,8 @@ public class SeachController<
 
 	@Override
 	public ResponseEntity<CollectionModel<M>> findAll(
-			@RequestParam(value = "page", required = false, defaultValue = IConstants.defaultPage) int page,
-			@RequestParam(value = "size", required = false, defaultValue = IConstants.defaultSize) int size,
+			@RequestParam(value = "page", required = false, defaultValue = IConstants.DEFAULT_PAGE) int page,
+			@RequestParam(value = "size", required = false, defaultValue = IConstants.DEFAULT_SIZE) int size,
 			@RequestParam(required = false) Map<String,String> filters) {
 		return ResponseEntity.ok().body(getPagedResourcesAssembler().toModel(getService().findPaginated(page, size, filters), getModelAssembler()));
 	}

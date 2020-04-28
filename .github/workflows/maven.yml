@@ -27,7 +27,7 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout
+    - uses: actions/checkout@master
     - name: Setup java
       uses: joschi/setup-jdk@v1
       env:
@@ -40,15 +40,6 @@ jobs:
       run: |
         mvn -q -am -Ptest clean verify jacoco:report sonar:sonar
         bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
-  Sonarcloud:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   Build:
     needs: Test
     runs-on: ubuntu-latest

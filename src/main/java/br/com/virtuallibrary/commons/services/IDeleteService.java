@@ -5,9 +5,9 @@ import java.io.Serializable;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
 
-public interface IDeleteService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>>
-	extends ILoadService<E, ID, R> {
+public interface IDeleteService<E extends BaseEntity, K extends Serializable, R extends IBaseRepository<E, K>>
+	extends ILoadService<E, K, R> {
 
-	void delete(final ID id);
+	void delete(final K id);
 
 }

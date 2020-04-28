@@ -1,5 +1,7 @@
 package br.com.virtuallibrary.othertests;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -11,7 +13,8 @@ public class VirtualLibraryApiApplicationTest {
 
 	@Test
 	public void testMain() {
-		VirtualLibraryApiApplication.main(new String[] {});		
+		VirtualLibraryApiApplication.main(new String[] {});
+		assertTrue(true);
 	}
 
 }

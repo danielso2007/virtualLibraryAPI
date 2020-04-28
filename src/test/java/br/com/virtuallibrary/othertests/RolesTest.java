@@ -18,12 +18,12 @@ public class RolesTest {
 
 	@Test
 	public void testGetDescriptionADMIN() {
-		assertEquals(Roles.ADMIN.getDescription(), "Administrador");
+		assertEquals("Administrador", Roles.ADMIN.getDescription());
 	}
 	
 	@Test
 	public void testGetDescriptionUSER() {
-		assertEquals(Roles.USER.getDescription(), "Usuário");
+		assertEquals("Usuário", Roles.USER.getDescription());
 	}
 
 }

@@ -18,7 +18,7 @@ public class VirtualLibraryApiApplication {
 		final SpringApplication application = new SpringApplication(VirtualLibraryApiApplication.class);
 		application.setBannerMode(Banner.Mode.OFF);
 		application.setWebApplicationType(WebApplicationType.SERVLET);
-		application.run(args);
+		application.run();
 	}
 
 }

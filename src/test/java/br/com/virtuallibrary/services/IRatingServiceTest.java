@@ -89,7 +89,7 @@ public class IRatingServiceTest {
 	@Test
 	public void testFindAll() {
 		List<Rating> list = service.findAll();
-		assertEquals(list.size(), 1);
+		assertEquals(1, list.size());
 	}
 
 	@Test
@@ -224,16 +224,16 @@ public class IRatingServiceTest {
 	
 	@Test
 	public void testGetCriteriaByFilter$gt() {
-		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.$GREATER_THAN, new Object());
+		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.GREATER_THAN, new Object());
 		Document document = criteria.getCriteriaObject();
-		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.$GREATER_THAN)));
+		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.GREATER_THAN)));
 	}
 	
 	@Test
 	public void testGetCriteriaByFilter$lte() {
-		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.$LESS_THAN_OR_EQUAL, new Object());
+		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.LESS_THAN_OR_EQUAL, new Object());
 		Document document = criteria.getCriteriaObject();
-		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.$LESS_THAN_OR_EQUAL)));
+		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.LESS_THAN_OR_EQUAL)));
 	}
 	
 	@Test

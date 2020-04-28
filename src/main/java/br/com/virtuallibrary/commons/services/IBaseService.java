@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import br.com.virtuallibrary.commons.entities.BaseEntity;
 import br.com.virtuallibrary.commons.repositories.IBaseRepository;
 
-public interface IBaseService<E extends BaseEntity, ID extends Serializable, R extends IBaseRepository<E, ID>> {
+public interface IBaseService<E extends BaseEntity, K extends Serializable, R extends IBaseRepository<E, K>> {
 
 	UserDetails getUser();
 	MongoTemplate getTemplate();

@@ -22,12 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SaveAndUpdateController<
 	    E extends BaseEntity,
-	    ID extends Serializable,
-	    R extends IBaseRepository<E, ID>,
-	    S extends ISaveAndUpdateService<E, ID, R>,
+	    K extends Serializable,
+	    R extends IBaseRepository<E, K>,
+	    S extends ISaveAndUpdateService<E, K, R>,
 	    M extends RepresentationModel<M>>
-    extends DeleteController<E, ID, R, S, M>
-    implements ISaveAndUpdateController<E, ID, R, S, M> {
+    extends DeleteController<E, K, R, S, M>
+    implements ISaveAndUpdateController<E, K, R, S, M> {
 
 	public SaveAndUpdateController(S service, PagedResourcesAssembler<E> pagedResourcesAssembler, RepresentationModelAssemblerSupport<E, M> modelAssembler) {
 		super(service, pagedResourcesAssembler, modelAssembler);
@@ -42,7 +42,7 @@ public class SaveAndUpdateController<
 	}
 
 	@Override
-	public ResponseEntity<M> update(@RequestBody @Valid E object, @PathVariable ID id) {
+	public ResponseEntity<M> update(@RequestBody @Valid E object, @PathVariable K id) {
 		return getService().update(object, id)
 				.map(getModelAssembler()::toModel) 
 				.map(ResponseEntity::ok) 
@@ -52,10 +52,7 @@ public class SaveAndUpdateController<
 	@Override
 	public ResponseEntity<M> update(
 			@RequestBody Map<String, String> updates,
-			@PathVariable ID id) throws NoSuchFieldException,
-	                                    SecurityException,
-	                                    IllegalArgumentException,
-	                                    IllegalAccessException {
+			@PathVariable K id) throws NoSuchFieldException, IllegalAccessException {
 		try {
 			return getService().update(updates, id)
 			.map(getModelAssembler()::toModel) 

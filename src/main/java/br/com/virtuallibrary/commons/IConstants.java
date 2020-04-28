@@ -37,8 +37,8 @@ public interface IConstants {
 	// MONGODB
 	String AND = "$and";
 	String REGEX_CONTAINS = ".*%s.*";
-	
 	String CONTAINS = "contains";
+
 	String GREATER_THAN = "gt";
 	String GREATER_THAN_OR_EQUAL = "gte";
 	String LESS_THAN = "lt";

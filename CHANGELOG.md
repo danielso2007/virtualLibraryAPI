@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/danielso2007/virtualLibraryAPI/compare/v0.5.1...v0.6.0) (2020-05-25)
+
+
+### Features
+
+* Removido e criado novo pacote para a base do REST no Github ([71994ce](https://github.com/danielso2007/virtualLibraryAPI/commit/71994ce6e8440b0b9395baf1c9b864bc3dd9e804))
+
 ### [0.5.1](https://github.com/danielso2007/virtualLibraryAPI/compare/v0.4.0...v0.5.1) (2020-05-25)
 
 

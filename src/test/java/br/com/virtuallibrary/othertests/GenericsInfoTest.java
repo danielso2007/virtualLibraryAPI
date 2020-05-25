@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.virtuallibrary.commons.utils.GenericsInfo;
-import br.com.virtuallibrary.commons.utils.GenericsUtils;
+import com.commons.rest.api.utils.GenericsInfo;
+import com.commons.rest.api.utils.GenericsUtils;
+
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.repositories.BookRepository;
 import br.com.virtuallibrary.services.IBookService;

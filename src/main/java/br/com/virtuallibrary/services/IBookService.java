@@ -1,6 +1,7 @@
 package br.com.virtuallibrary.services;
 
-import br.com.virtuallibrary.commons.services.ISaveAndUpdateService;
+import com.commons.rest.api.services.ISaveAndUpdateService;
+
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.repositories.BookRepository;
 

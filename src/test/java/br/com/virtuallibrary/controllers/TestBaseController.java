@@ -2,9 +2,9 @@ package br.com.virtuallibrary.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import br.com.virtuallibrary.commons.IConstants;
+import com.commons.rest.api.IConstantsAPI;
 
 public abstract class TestBaseController {
 
@@ -59,15 +59,15 @@ public abstract class TestBaseController {
 		MockHttpServletRequestBuilder requestBuilder = null;
 
 		if (HttpMethod.POST.equals(httpMethod)) {
-			requestBuilder = post(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
+			requestBuilder = post(url).contentType(IConstantsAPI.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.GET.equals(httpMethod)) {
-			requestBuilder = get(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
+			requestBuilder = get(url).contentType(IConstantsAPI.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.PUT.equals(httpMethod)) {
-			requestBuilder = put(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
+			requestBuilder = put(url).contentType(IConstantsAPI.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.DELETE.equals(httpMethod)) {
-			requestBuilder = delete(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
+			requestBuilder = delete(url).contentType(IConstantsAPI.APPLICATION_JSON_UTF_8);
 		} else if (HttpMethod.PATCH.equals(httpMethod)) {
-			requestBuilder = patch(url).contentType(IConstants.APPLICATION_JSON_UTF_8);
+			requestBuilder = patch(url).contentType(IConstantsAPI.APPLICATION_JSON_UTF_8);
 		}
 
 		if (json != null) {

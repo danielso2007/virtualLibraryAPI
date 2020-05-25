@@ -2,7 +2,8 @@ package br.com.virtuallibrary.services;
 
 import java.util.List;
 
-import br.com.virtuallibrary.commons.services.ISaveAndUpdateService;
+import com.commons.rest.api.services.ISaveAndUpdateService;
+
 import br.com.virtuallibrary.entity.Rating;
 import br.com.virtuallibrary.repositories.RatingRepository;
 

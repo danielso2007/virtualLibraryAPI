@@ -7,14 +7,15 @@ import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.virtuallibrary.commons.IConstants;
-import br.com.virtuallibrary.commons.controllers.IDeleteController;
-import br.com.virtuallibrary.commons.controllers.ILoadController;
-import br.com.virtuallibrary.commons.controllers.ISaveAndUpdateController;
-import br.com.virtuallibrary.commons.controllers.ISearchController;
-import br.com.virtuallibrary.commons.entities.BaseEntity;
-import br.com.virtuallibrary.commons.repositories.IBaseRepository;
-import br.com.virtuallibrary.commons.services.ISaveAndUpdateService;
+import com.commons.rest.api.controllers.IDeleteController;
+import com.commons.rest.api.controllers.ILoadController;
+import com.commons.rest.api.controllers.ISaveAndUpdateController;
+import com.commons.rest.api.controllers.ISearchController;
+import com.commons.rest.api.entities.BaseEntity;
+import com.commons.rest.api.repositories.IBaseRepository;
+import com.commons.rest.api.services.ISaveAndUpdateService;
+
+import br.com.virtuallibrary.IConstants;
 import br.com.virtuallibrary.entity.Book;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

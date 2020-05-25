@@ -25,9 +25,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.commons.rest.api.IConstantsAPI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.entity.Rating;
 import br.com.virtuallibrary.repositories.RatingRepository;
 import br.com.virtuallibrary.services.IRatingService;
@@ -126,7 +126,7 @@ public class RatingControllerTest extends TestBaseController {
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		ENTITY_01.setStars(-1);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 	@Test
@@ -135,7 +135,7 @@ public class RatingControllerTest extends TestBaseController {
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		ENTITY_01.setBookId(null);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 	@Test
@@ -162,7 +162,7 @@ public class RatingControllerTest extends TestBaseController {
 		ENTITY_01.setBookId(null);
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 	@Test
@@ -172,7 +172,7 @@ public class RatingControllerTest extends TestBaseController {
 		ENTITY_01.setStars(-1);
 		Optional<Rating> opt = Optional.of(ENTITY_01);
 		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 	@Test
@@ -194,7 +194,7 @@ public class RatingControllerTest extends TestBaseController {
 		fields.put("asdas", "newEqwe");
 		fields.put("asdasd", "newTWER");
 		String json = patchHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isNotFound()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 }

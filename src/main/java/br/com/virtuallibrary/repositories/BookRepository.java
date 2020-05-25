@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.virtuallibrary.commons.repositories.IBaseRepository;
+import com.commons.rest.api.repositories.IBaseRepository;
+
 import br.com.virtuallibrary.entity.Book;
 
 @Repository

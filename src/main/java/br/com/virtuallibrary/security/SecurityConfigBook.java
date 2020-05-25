@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import br.com.virtuallibrary.commons.IConstants;
+import br.com.virtuallibrary.IConstants;
 import br.com.virtuallibrary.enums.Roles;
 
 /**

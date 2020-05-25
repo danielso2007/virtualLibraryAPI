@@ -27,9 +27,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.commons.rest.api.IConstantsAPI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.virtuallibrary.commons.IConstants;
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.repositories.BookRepository;
 import br.com.virtuallibrary.services.impl.BookService;
@@ -122,7 +122,7 @@ public class BookControllerTest extends TestBaseController {
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		ENTITY_01.setTitle(null);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 	@Test
@@ -131,7 +131,7 @@ public class BookControllerTest extends TestBaseController {
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		ENTITY_01.setAuthor(null);
 		String json = postHttpServletResponse(String.format("%s", API), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 	@Test
@@ -159,7 +159,7 @@ public class BookControllerTest extends TestBaseController {
 		ENTITY_01.setTitle(null);
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 	@Test
@@ -169,7 +169,7 @@ public class BookControllerTest extends TestBaseController {
 		ENTITY_01.setAuthor(null);
 		Optional<Book> opt = Optional.of(ENTITY_01);
 		String json = putHttpServletResponse(String.format("%s/%s", API, ID), jsonEntity.write(opt.get()).getJson(), status().isBadRequest()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 	@Test
@@ -191,7 +191,7 @@ public class BookControllerTest extends TestBaseController {
 		fields.put("asdas", "newTitle");
 		fields.put("asdasd", "newAuthor");
 		String json = patchHttpServletResponse(String.format("%s/%s", API, ID), jsonEntityFields.write(fields).getJson(), status().isNotFound()).getContentAsString();
-		assertEquals(IConstants.BLANK, json);
+		assertEquals(IConstantsAPI.BLANK, json);
 	}
 	
 }

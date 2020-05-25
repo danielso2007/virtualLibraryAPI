@@ -29,8 +29,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.virtuallibrary.commons.IConstants;
-import br.com.virtuallibrary.commons.services.impl.BaseService;
+import com.commons.rest.api.IConstantsAPI;
+import com.commons.rest.api.services.impl.BaseService;
+
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.entity.Book.BookBuilder;
 import br.com.virtuallibrary.repositories.BookRepository;
@@ -211,16 +212,16 @@ public class BookServicesTest {
 
 	@Test
 	public void testGetCriteriaByFilter$gt() {
-		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.GREATER_THAN, new Object());
+		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstantsAPI.GREATER_THAN, new Object());
 		Document document = criteria.getCriteriaObject();
-		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.GREATER_THAN)));
+		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstantsAPI.GREATER_THAN)));
 	}
 	
 	@Test
 	public void testGetCriteriaByFilter$lte() {
-		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstants.LESS_THAN_OR_EQUAL, new Object());
+		Criteria criteria = service.getCriteriaByFilter(new Criteria(), IConstantsAPI.LESS_THAN_OR_EQUAL, new Object());
 		Document document = criteria.getCriteriaObject();
-		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstants.LESS_THAN_OR_EQUAL)));
+		assertTrue(document.containsKey(String.format(FILTER_FORMAT, IConstantsAPI.LESS_THAN_OR_EQUAL)));
 	}
 	
 	@Test

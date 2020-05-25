@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.virtuallibrary.commons.controllers.impl.SaveAndUpdateController;
+import com.commons.rest.api.controllers.impl.SaveAndUpdateController;
+
 import br.com.virtuallibrary.entity.Book;
 import br.com.virtuallibrary.repositories.BookRepository;
 import br.com.virtuallibrary.rest.controllers.IBookController;

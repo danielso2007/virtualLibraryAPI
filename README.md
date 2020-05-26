@@ -16,6 +16,8 @@
 
 Virtual library API. This project is used to study REST Spring Boot projects.
 
+Este projeto usa o [Commons REST API](https://github.com/danielso2007/commons-rest-api) para dependência para as chamadas e padrões REST. Esse projeto foi feito por mim para abstrair todas a chamadas e retornos padrões do princípio RESTFull. Será necessário instalar o projeto localmente ou usar o [package do github](https://github.com/danielso2007/commons-rest-api/packages).
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.

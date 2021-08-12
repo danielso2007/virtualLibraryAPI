@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>com.commons.rest.api</groupId>
 			<artifactId>commons-rest-api</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.2</version>
 		</dependency>
 
 		<!-- Removendo o Tomcat para usar o Undertow -->
